@@ -1,14 +1,53 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-generator client {
-  provider = "prisma-client-js"
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+model User {
+  id       Int           @id @default(autoincrement())
+  Name     String        @db.VarChar(50)
+  LastName String        @db.VarChar(30)
+  UserName String        @unique @db.VarChar(15)
+  Email    String        @unique @db.VarChar(50)
+  Password String        @db.VarChar(60)
+  Role     Int           @db.TinyInt
+  UserPost UserHasPost[]
+}
+
+model Post {
+  id           Int               @id @default(autoincrement())
+  Title        String            @db.VarChar(40)
+  Content      String            @db.MediumText
+  CreationDate DateTime          @db.Date
+  UpdateDate   DateTime?         @db.Date
+  PostCategory PostHasCategory[]
+  UserPost     UserHasPost[]
+}
+
+model Category {
+  id           Int               @id @default(autoincrement())
+  Name         String            @db.VarChar(20)
+  PostCategory PostHasCategory[]
+}
+
+model PostHasCategory {
+  postId     Int
+  categoryId Int
+
+  post     Post     @relation(fields: [postId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@id([postId, categoryId])
+  @@map("PostCategory")
+}
+
+model UserHasPost {
+  userId Int
+  postId Int
+
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+
+  @@id([userId, postId])
+  @@map("UserPost")
 }
