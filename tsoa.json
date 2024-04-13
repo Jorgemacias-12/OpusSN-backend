@@ -4,7 +4,7 @@
   "spec": {
     "version": "1.0.0",
     "name": "Opus REST API",
-    "description": "REST API for the social media Opus, a please where you can talk about technology.",
+    "description": "REST API for the social media Opus, a place where you can talk about technology.",
     "specVersion": 3,
     "outputDirectory": "./src/public",
     "host": "localhost:4000"
