@@ -1,13 +1,15 @@
 {
   "entryFile": "./server.ts",
+  "controllerPathGlob": ["./src/controllers/**/*.ts"],
   "spec": {
     "version": "1.0.0",
     "name": "Opus REST API",
-    "description": "Descripción de tu API",
+    "description": "REST API for the social media Opus, a please where you can talk about technology.",
     "specVersion": 3,
-    "outputDirectory": "./src/public"
+    "outputDirectory": "./src/public",
+    "host": "localhost:4000"
   },
   "routes": {
-    "routesDir": "./src/routes/index.ts"
+    "routesDir": "./src/routes/"
   }
 }
