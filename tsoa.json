@@ -1,13 +1,13 @@
 {
   "entryFile": "./server.ts",
   "spec": {
-      "version": "1.0.0",
-      "name": "Opus REST API",
-      "description": "Descripción de tu API",
-      "specVersion": 3,
-      "outputDirectory": "./src/public"
+    "version": "1.0.0",
+    "name": "Opus REST API",
+    "description": "Descripción de tu API",
+    "specVersion": 3,
+    "outputDirectory": "./src/public"
   },
   "routes": {
-      "routesDir": "./src/routes"
+    "routesDir": "./src/routes/index.ts"
   }
 }
