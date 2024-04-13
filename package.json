@@ -29,5 +29,8 @@
     "predev": "bunx swagger || true",
     "prebuild": "bunx swagger || true",
     "swagger": "bunx tsoa spec"
+  },
+  "prisma": {
+    "schema": "./src/db/schema.prisma"
   }
 }
