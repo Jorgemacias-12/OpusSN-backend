@@ -1,5 +1,6 @@
 export interface User {
   id: number;
+  name: string;
   username: string;
   lastname: string;
   email: string;
@@ -10,7 +11,7 @@ export interface User {
 /**
  *  A post request shouldn't contain an id.
  */
-export type UserCreationParams = Pick<User, "username" | "lastname" | "email" | "role" | "password">;
+export type UserCreationParams = Pick<User, "name" | "username" | "lastname" | "email" | "role" | "password">;
 
 /**
  *  A get request don't have to inlcude password field
