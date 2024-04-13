@@ -1,0 +1,151 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "Opus REST API",
+		"version": "1.0.0",
+		"description": "REST API for the social media Opus, a please where you can talk about technology.",
+		"contact": {}
+	},
+	"paths": {
+		"/users": {
+			"get": {
+				"operationId": "GetUsers",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Gets a list with all of the users",
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateUser",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Creates a new user.",
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "The data of the new user.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"description": "The data of the new user."
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/{id}": {
+			"get": {
+				"operationId": "GetUser",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Get an specified user by ID",
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "ID of the user.",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateUser",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Updates an existent user",
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "The id of the user to be updated",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "The new data of the user",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"description": "The new data of the user"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteUser",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Deletes an existent user.",
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "The ID related to the user.",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "https://localhost:4000/"
+		}
+	]
+}
