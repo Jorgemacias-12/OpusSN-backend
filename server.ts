@@ -17,9 +17,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("./src/public"));
 
+// Disable powered by 
+app.disable('x-powered-by');
+
 app.use('/users', userRouter);
-app.use('/categories', postRouter);
-app.use('/posts', categoryRouter);
+app.use('/categories', categoryRouter);
+app.use('/posts', postRouter);
 
 app.use(
   "/docs",
