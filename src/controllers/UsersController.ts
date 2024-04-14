@@ -1,10 +1,16 @@
 import { Get, Path, Post, Route, Response, SuccessResponse, Tags, Body, Put, Delete, } from 'tsoa'
+import type { User, UserCreationParams } from '../models/User';
+import { PrismaClient } from '@prisma/client';
+import { hashPassword } from '../utils';
 
 // TODO: Define response types in the types folder
 
 @Route("/users") // The given route base path in this case users
 @Tags("Users") // This tag is applied in the swagger ui
 export default class UserController {
+
+  // prisma client object
+  prisma = new PrismaClient();
 
   // You can use JSDoc to add description to the operation 
   // of the endpoint.
@@ -30,11 +36,27 @@ export default class UserController {
 
   /**
    *  Creates a new user.
-   *  @param user The data of the new user.
+   *  @param {User} user The data of the new user.
+   *  
    */
   @Post("/")
-  public async createUser(@Body() user: any) {
+  public async createUser(@Body() user: UserCreationParams) {
+    const { name, lastname, username, email, password, role } = user;
 
+    const newUser = await this.prisma.user.create({
+      data: {
+        Name: name,
+        LastName: lastname,
+        UserName: username,
+        Email: email,
+        Password: await hashPassword(password),
+        Role: role
+      }
+    })
+
+    await this.prisma.$disconnect();
+    
+    return newUser;
   }
 
   /**
