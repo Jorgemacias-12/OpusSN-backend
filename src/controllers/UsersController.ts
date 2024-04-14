@@ -1,7 +1,8 @@
 import { Get, Path, Post, Route, Response, SuccessResponse, Tags, Body, Put, Delete, } from 'tsoa'
-import type { User, UserCreationParams } from '../models/User';
+import type { User, UserCreationParams, UserGetParams } from '../models/User';
 import { PrismaClient } from '@prisma/client';
 import { hashPassword } from '../utils';
+import type { GetUsersResponse } from '../types';
 
 // TODO: Define response types in the types folder
 
@@ -19,8 +20,32 @@ export default class UserController {
    *  Gets a list with all of the users
    */
   @Get("/")
-  public async getUsers() {
+  public async getUsers(): Promise<GetUsersResponse | undefined> {
+    try {
+      const users = await this.prisma.user.findMany();
+      const userCount = await this.prisma.user.count();
 
+      const transformedUsers: UserGetParams[] = users.map(user => ({
+        id: user.id,
+        name: user.Name, // Transforma Name a name
+        lastname: user.LastName, // Transforma LastName a lastname
+        username: user.UserName, // Transforma UserName a username
+        email: user.Email, // Transforma Email a email
+        role: user.Role, // Transforma Role a role
+      }));
+      
+      return {
+        count: userCount,
+        users: transformedUsers
+      }
+    }
+    catch (err) {
+      console.error(err);
+      return undefined;
+    }
+    finally {
+      this.prisma.$disconnect();
+    }
   }
 
   /**
@@ -55,7 +80,7 @@ export default class UserController {
     })
 
     await this.prisma.$disconnect();
-    
+
     return newUser;
   }
 
