@@ -2,8 +2,8 @@ import { Router, type Request, type Response } from "express";
 import { body, validationResult, type ValidationChain } from 'express-validator';
 import UserController from "../controllers/UsersController";
 import { createUserErrorMessages } from "../utils/validationErrors";
-import type { User, UserCreationParams } from "../models/User";
-import { RESPONSE_CODES } from "../utils";
+import type { UserCreationParams } from "../models/User";
+import { RESPONSE_CODES } from "../types";
 
 export const userRouter = Router();
 
@@ -12,7 +12,7 @@ const controller = new UserController();
 //!! Use controller to return the desired json data
 userRouter.get('/', async (req: Request, res: Response) => {
   const result = await controller.getUsers();
-  
+
   const { users, count } = result!;
 
   res.status(200).json({
@@ -21,7 +21,18 @@ userRouter.get('/', async (req: Request, res: Response) => {
   })
 });
 
-userRouter.get('/:id', (req: Request, res: Response) => {
+userRouter.get('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const response = await controller.getUser(id);
+
+  if (response === null) {
+    res.status(RESPONSE_CODES.NOT_FOUND).json({
+      message: `El usuario con id: ${id} no existe`
+    })
+  }
+
+  res.json(response);
 
 });
 
@@ -55,7 +66,6 @@ const createUserValidationChain: ValidationChain[] = [
     .matches(/^[a-zA-Z0-9_-]+$/)
     .withMessage(createUserErrorMessages.usernameCharacters)
     .custom(async (value) => {
-      // TODO: use prisma to lookup for unique username
       let userExists: boolean = false;
 
       if (userExists) {
