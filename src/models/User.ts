@@ -1,19 +1,61 @@
+/**
+ *  This User representation is supposted to be used in the creation method
+ *  in the UsersController.
+ * 
+ */
 export interface User {
+  /**
+   *  It's an incremental value, and normal integer
+   */
   id: number;
+
+  /**
+   *  User's real name
+   */
   name: string;
+
+  /**
+   * The name that will be displayed in the UI
+   */
   username: string;
+
+  /**
+   * User's lastname
+   */
   lastname: string;
+
+  /**
+   * The email the user usted to register his account
+   */
   email: string;
+
+  /**
+   * The password that the user creates to authenticate with the 
+   * social media.
+   */
   password: string;
+
+  /**
+   * His role in the Platform could be normal user or mod
+   * @isInt 
+   * @example 
+   * 0 is normal
+   * @example 
+   * 1 is mod
+   */
   role: number
 }
 
 /**
- *  A post request shouldn't contain an id.
+ *  This User representation is supposted to be used in the creation method
+ *  in the UsersController.
+ * 
  */
-export type UserCreationParams = Pick<User, "name" | "username" | "lastname" | "email" | "role" | "password">;
+export interface UserCreationParams extends Pick<User, "name" | "username" | "lastname" | "email" | "role" | "password"> { };
 
 /**
- *  A get request don't have to inlcude password field
+ *  This User representation is supposted to be used in the creation method
+ *  in the UsersController.
+ * 
  */
-export type UserGetParams = Pick<User, "id" | "username" | "lastname" | "email" | "role">;
+export interface UserGetParams extends Pick<User, "id" | "username" | "lastname" | "email" | "role"> { };
