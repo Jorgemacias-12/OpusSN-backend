@@ -58,4 +58,4 @@ export interface UserCreationParams extends Pick<User, "name" | "username" | "la
  *  in the UsersController.
  * 
  */
-export interface UserGetParams extends Pick<User, "id" | "username" | "lastname" | "email" | "role"> { };
+export interface UserGetParams extends Pick<User, "id" | "name" | "username" | "lastname" | "email" | "role"> { };
