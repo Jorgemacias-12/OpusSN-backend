@@ -10,8 +10,15 @@ export const userRouter = Router();
 const controller = new UserController();
 
 //!! Use controller to return the desired json data
-userRouter.get('/', (req: Request, res: Response) => {
+userRouter.get('/', async (req: Request, res: Response) => {
+  const result = await controller.getUsers();
+  
+  const { users, count } = result!;
 
+  res.status(200).json({
+    usersCounter: count,
+    users
+  })
 });
 
 userRouter.get('/:id', (req: Request, res: Response) => {
