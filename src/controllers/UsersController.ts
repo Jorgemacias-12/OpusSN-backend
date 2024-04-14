@@ -55,8 +55,23 @@ export default class UserController {
   @Get("/{id}")
   public async getUser(
     @Path() id: string
-  ) {
+  ): Promise<UserGetParams | undefined | null> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: Number.parseInt(id)
+      }
+    })
 
+    if (user === null) return null;
+
+    return {
+      id: user.id,
+      name: user.Name,
+      lastname: user.LastName,
+      username: user.UserName,
+      email: user.Email,
+      role: user.Role
+    }
   }
 
   /**
