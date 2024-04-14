@@ -7,6 +7,3 @@ export const hashPassword = async (text: string) => {
 
   return hashedPassword;
 }
-export enum RESPONSE_CODES {
-  CREATED = 201,
-}
