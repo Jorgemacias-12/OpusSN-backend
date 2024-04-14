@@ -6,13 +6,54 @@
 		"parameters": {},
 		"requestBodies": {},
 		"responses": {},
-		"schemas": {},
+		"schemas": {
+			"UserCreationParams": {
+				"description": "This User representation is supposted to be used in the creation method\r\nin the UsersController.",
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "User's real name"
+					},
+					"username": {
+						"type": "string",
+						"description": "The name that will be displayed in the UI"
+					},
+					"lastname": {
+						"type": "string",
+						"description": "User's lastname"
+					},
+					"email": {
+						"type": "string",
+						"description": "The email the user usted to register his account"
+					},
+					"role": {
+						"type": "integer",
+						"format": "int32",
+						"description": "His role in the Platform could be normal user or mod"
+					},
+					"password": {
+						"type": "string",
+						"description": "The password that the user creates to authenticate with the \r\nsocial media."
+					}
+				},
+				"required": [
+					"name",
+					"username",
+					"lastname",
+					"email",
+					"role",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": true
+			}
+		},
 		"securitySchemes": {}
 	},
 	"info": {
 		"title": "Opus REST API",
 		"version": "1.0.0",
-		"description": "REST API for the social media Opus, a please where you can talk about technology.",
+		"description": "REST API for the social media Opus, a place where you can talk about technology.",
 		"contact": {}
 	},
 	"paths": {
@@ -34,8 +75,49 @@
 			"post": {
 				"operationId": "CreateUser",
 				"responses": {
-					"204": {
-						"description": "No content"
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"Role": {
+											"type": "number",
+											"format": "double"
+										},
+										"Password": {
+											"type": "string"
+										},
+										"Email": {
+											"type": "string"
+										},
+										"UserName": {
+											"type": "string"
+										},
+										"LastName": {
+											"type": "string"
+										},
+										"Name": {
+											"type": "string"
+										},
+										"id": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"Role",
+										"Password",
+										"Email",
+										"UserName",
+										"LastName",
+										"Name",
+										"id"
+									],
+									"type": "object"
+								}
+							}
+						}
 					}
 				},
 				"description": "Creates a new user.",
@@ -50,6 +132,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
+								"$ref": "#/components/schemas/UserCreationParams",
 								"description": "The data of the new user."
 							}
 						}
