@@ -2,8 +2,8 @@ import { Router, response, type Request, type Response } from "express";
 import { body, validationResult, type ValidationChain } from 'express-validator';
 import UserController from "../controllers/UsersController";
 import { createUserErrorMessages } from "../utils/validationErrors";
-import { RESPONSE_CODES, type UserCreationResponse } from "../types";
-import type { NewUser } from "../models/User";
+import { RESPONSE_CODES, type CheckUsernameAvailabilityResponse, type UserCollectionResponse, type UserCreationResponse } from "../types";
+import type { NewUser, User } from "../models/User";
 
 export const userRouter = Router();
 
@@ -11,38 +11,35 @@ const controller = new UserController();
 
 //!! Use controller to return the desired json data
 userRouter.get('/', async (req: Request, res: Response) => {
-  // const { username, checkIfExists } = req.query;
+  const { UserName, CheckIfExists } = req.query;
 
-  // if (checkIfExists == 'true') {
-  //   try {
-  //     const isUsernameAvailable = await controller.checkIfUsernameIsAvailable(username as string);
+  // Check if UserName is already taken by another person
+  if (CheckIfExists == 'true' &&
+    UserName != ''
+  ) {
+    const response = await controller.CheckIfUsernameIsAvailable(UserName as string) as CheckUsernameAvailabilityResponse;
 
-  //     return res.status(RESPONSE_CODES.OK).json({
-  //       IsUsernameAvailable: isUsernameAvailable
-  //     });
-  //   }
-  //   catch (err) {
-  //     return res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
-  //       error: `Error checking for existing username info: ${err}`
-  //     });
-  //   }
-  // }
+    if (response.error != null ||
+       response.error != undefined
+    ){
+      res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json(response);
+      
+      return;
+    }
 
-  // try {
-  //   const result = await controller.getUsers();
+    res.status(RESPONSE_CODES.OK).json(response);
+  }
 
-  //   const { users, count } = result!;
+  // Fetch all users w/o any condition
+  const response = await controller.getUsers() as UserCollectionResponse;
 
-  //   return res.status(RESPONSE_CODES.OK).json({
-  //     usersCount: count,
-  //     users
-  //   })
-  // }
-  // catch (err) {
-  //   return res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
-  //     error: `Error getting users info: ${err}`
-  //   });
-  // }
+  if (response.error != null) {
+    res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json(response);
+    
+    return;
+  }
+
+  res.status(RESPONSE_CODES.OK).json(response);
 });
 
 userRouter.get('/:id', async (req: Request, res: Response) => {
