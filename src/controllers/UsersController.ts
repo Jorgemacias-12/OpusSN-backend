@@ -2,7 +2,7 @@ import { Get, Path, Post, Route, Response, SuccessResponse, Tags, Body, Put, Del
 import type { NewUser, SafeUser } from '../models/User';
 import { Prisma, PrismaClient } from '@prisma/client'
 import { hashPassword } from '../utils';
-import type { CheckUsernameAvailabilityResponse, UserCreationResponse } from '../types';
+import type { CheckUsernameAvailabilityResponse, UserCollectionResponse, UserCreationResponse } from '../types';
 
 // TODO: Define response types in the types folder
 
@@ -17,35 +17,50 @@ export default class UserController {
   // of the endpoint.
 
   /**
-   *  Gets a list with all of the users
-   */
+ * Retrieves a list of all users and the total user count.
+ *
+ * @returns {Promise<UserCollectionResponse>} - A promise that resolves to a {@link UserCollectionResponse} object containing an array of users and the user count, or null in case of  an error.
+ * 
+ */
   @Get("/")
-  public async getUsers() {
-    // try {
-    //   const users = await this.prisma.user.findMany();
-    //   const userCount = await this.prisma.user.count();
+  // TODO: improve error handling
+  public async getUsers(): Promise<UserCollectionResponse> {
+    try {
+      const users = await this.prisma.user.findMany();
+      const userCount = await this.prisma.user.count();
 
-    //   const transformedUsers: UserGetParams[] = users.map(user => ({
-    //     id: user.id,
-    //     name: user.Name, // Transforma Name a name
-    //     lastname: user.LastName, // Transforma LastName a lastname
-    //     username: user.UserName, // Transforma UserName a username
-    //     email: user.Email, // Transforma Email a email
-    //     role: user.Role, // Transforma Role a role
-    //   }));
-
-    //   return {
-    //     count: userCount,
-    //     users: transformedUsers
-    //   }
-    // }
-    // catch (err) {
-    //   console.error(err);
-    //   return undefined;
-    // }
-    // finally {
-    //   this.prisma.$disconnect();
-    // }
+      return {
+        users,
+        userCount
+      }
+    }
+    catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        return {
+          userCount: 0,
+          users: null,
+          error: {
+            code: err.code,
+            message: err.message,
+            meta: err.meta
+          }
+        }
+      }
+      else {
+        return {
+          userCount: 0,
+          users: null,
+          error: {
+            code: "500",
+            message: "Something went wrong getting users",
+            meta: null
+          }
+        }
+      }
+    }
+    finally {
+      await this.prisma.$disconnect();
+    }
   }
 
   /**
