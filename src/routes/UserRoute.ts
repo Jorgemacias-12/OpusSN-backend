@@ -2,7 +2,7 @@ import { Router, response, type Request, type Response } from "express";
 import { body, validationResult, type ValidationChain } from 'express-validator';
 import UserController from "../controllers/UsersController";
 import { createUserErrorMessages } from "../utils/validationErrors";
-import { RESPONSE_CODES, type CheckUsernameAvailabilityResponse, type UserCollectionResponse, type UserCreationResponse } from "../types";
+import { RESPONSE_CODES, type CheckUsernameAvailabilityResponse, type UserCollectionResponse, type UserCreationResponse, type UserResponse } from "../types";
 import type { NewUser, User } from "../models/User";
 
 export const userRouter = Router();
@@ -43,17 +43,23 @@ userRouter.get('/', async (req: Request, res: Response) => {
 });
 
 userRouter.get('/:id', async (req: Request, res: Response) => {
-  // const { id } = req.params;
+  const { id } = req.params;
 
-  // const response = await controller.getUser(id);
+  const parsedId = Number.parseInt(id);
 
-  // if (response === null) {
-  //   res.status(RESPONSE_CODES.NOT_FOUND).json({
-  //     message: `El usuario con id: ${id} no existe`
-  //   })
-  // }
+  if (isNaN(parsedId) || !Number.isInteger(parsedId) || parsedId <= 0) {
+    res.status(RESPONSE_CODES.BAD_REQUEST).json({
+      error: `Invalid user ID -> ${id}}`
+    });
+  }
 
-  // res.json(response);
+  const response = await controller.getUser(parsedId);
+
+  if (response.error) {
+    return res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json(response);
+  }
+
+  res.json(response);  
 });
 
 
