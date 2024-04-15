@@ -37,6 +37,29 @@ export interface UserCollectionResponse {
 }
 
 /**
+ * Represents the response from a request to retrieve a user by their ID.
+ * 
+ * @interface UserResponse
+ */
+export interface UserResponse {
+  /**
+   * The user data, or `null` if no user was found.
+   * 
+   * @type {SafeUser | null}
+   */
+  user: SafeUser | null,
+  /**
+   * Optional error object containing information about any error that occurred during the request.
+   * 
+   * @property {Object} [error]
+   * @property {string} error.message - A message describing the error that occurred.
+   */
+  error?: {
+    message: string;
+  }
+}
+
+/**
  * Interface representing an error from Prisma.
  * @typedef {Object} PrismaError
  * @property {string} code - The error code.
