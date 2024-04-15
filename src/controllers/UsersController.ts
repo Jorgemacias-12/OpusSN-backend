@@ -1,8 +1,8 @@
 import { Get, Path, Post, Route, Response, SuccessResponse, Tags, Body, Put, Delete, } from 'tsoa'
 import type { NewUser, SafeUser } from '../models/User';
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 import { hashPassword } from '../utils';
-import type { UserCreationResponse } from '../types';
+import type { CheckUserNameResponse, CheckUsernameAvailability, CheckUsernameAvailabilityResponse, UserCreationResponse } from '../types';
 
 // TODO: Define response types in the types folder
 
@@ -204,20 +204,46 @@ export default class UserController {
   }
 
   /**
-   * 
-   * @param username 
-   * @returns 
+   * Checks if the given username is available (not already taken).
+   * @param {string} UserName - The username to check for availability.
+   * @returns {Promise<CheckUsernameAvailabilityResponse>} - A promise that resolves to a response object of type {@link CheckUsernameAvailabilityResponse } containing a boolean indicating the availability of the username and an optional error object if an error occurred.
+   * @typedef {CheckUsernameAvailabilityResponse} CheckUsernameAvailabilityResponse - The response type containing the availability status and an optional error object.
    */
-  public async checkIfUsernameIsAvailable(username: string) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        UserName: username
-      },
-      select: {
-        id: true
-      }
-    })
+  public async CheckIfUsernameIsAvailable(UserName: string): Promise<CheckUsernameAvailabilityResponse> {
+    const response: CheckUsernameAvailabilityResponse = {
+      isAvailable: false,
+    };
 
-    return user === null;
+    try {
+      // Fetch only id
+      const user = await this.prisma.user.findUnique({
+        where: {
+          UserName
+        },
+        select: {
+          id: true
+        }
+      });
+
+      response.isAvailable = user === null;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        response.error = {
+          code: error.code,
+          message: error.message,
+          meta: error.meta
+        };
+      } else {
+        response.error = {
+          code: "500",
+          message: "Something went wrong checking for username availability",
+          meta: null,
+        };
+      }
+    } finally {
+      await this.prisma.$disconnect();
+    }
+
+    return response;
   }
 }
