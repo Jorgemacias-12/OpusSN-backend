@@ -2,7 +2,7 @@ import { Get, Path, Post, Route, Response, SuccessResponse, Tags, Body, Put, Del
 import type { NewUser, SafeUser } from '../models/User';
 import { Prisma, PrismaClient } from '@prisma/client'
 import { hashPassword } from '../utils';
-import type { CheckUserNameResponse, CheckUsernameAvailability, CheckUsernameAvailabilityResponse, UserCreationResponse } from '../types';
+import type { CheckUsernameAvailabilityResponse, UserCreationResponse } from '../types';
 
 // TODO: Define response types in the types folder
 
