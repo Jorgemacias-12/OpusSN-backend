@@ -1,4 +1,4 @@
-import type { NewUser, SafeUser } from "../models/User";
+import type { SafeUser, User } from "../models/User";
 
 export interface UserCreationResponse {
   message: string;
@@ -7,11 +7,19 @@ export interface UserCreationResponse {
 
 export interface CheckUsernameAvailabilityResponse {
   isAvailable: boolean;
-  error?: {
-    code: string,
-    meta: string | unknown,
-    message: string,
-  }
+  error?: PrismaError
+}
+
+export interface UserCollectionResponse {
+  userCount: number;
+  users: User[] | null;
+  error?: PrismaError
+}
+
+export interface PrismaError {
+  code: string;
+  meta: string | unknown;
+  message: string;
 }
 
 export enum RESPONSE_CODES {
