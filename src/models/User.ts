@@ -1,61 +1,44 @@
 /**
- *  This User representation is supposted to be used in the creation method
- *  in the UsersController.
- * 
+ * Represents a user in the application.
+ * @typedef {Object} User
+ * @property {number} id - The unique ID of the user.
+ * @property {string} Name - The user's real name.
+ * @property {string} LastName - The user's last name.
+ * @property {string} UserName - The username for logging in.
+ * @property {string} Email - The user's email address.
+ * @property {string} Password - The user's password for authentication.
+ * @property {number} Role - The user's role in the platform (e.g., 0 for regular user and 1 for moderator).
  */
 export interface User {
-  /**
-   *  It's an incremental value, and normal integer
-   */
   id: number;
-
-  /**
-   *  User's real name
-   */
-  name: string;
-
-  /**
-   * The name that will be displayed in the UI
-   */
-  username: string;
-
-  /**
-   * User's lastname
-   */
-  lastname: string;
-
-  /**
-   * The email the user usted to register his account
-   */
-  email: string;
-
-  /**
-   * The password that the user creates to authenticate with the 
-   * social media.
-   */
-  password: string;
-
-  /**
-   * His role in the Platform could be normal user or mod
-   * @isInt 
-   * @example 
-   * 0 is normal
-   * @example 
-   * 1 is mod
-   */
-  role: number
+  Name: string;
+  LastName: string;
+  UserName: string;
+  Email: string;
+  Password: string;
+  Role: number;
 }
 
 /**
- *  This User representation is supposted to be used in the creation method
- *  in the UsersController.
- * 
+ * Represents a safe user object that excludes the password property from the User interface.
+ * @typedef {Object} SafeUser
+ * @property {number} id - The unique ID of the user.
+ * @property {string} Name - The user's real name.
+ * @property {string} LastName - The user's last name.
+ * @property {string} UserName - The username for logging in.
+ * @property {string} Email - The user's email address.
+ * @property {number} Role - The user's role in the platform (e.g., 0 for regular user and 1 for moderator).
  */
-export interface UserCreationParams extends Pick<User, "name" | "username" | "lastname" | "email" | "role" | "password"> { };
+export interface SafeUser extends Pick<User, "id" | "Name" | "LastName" | "UserName" | "Email" | "Role"> { };
 
 /**
- *  This User representation is supposted to be used in the creation method
- *  in the UsersController.
- * 
+ * Represents a new user object that excludes the ID property from the User interface.
+ * @typedef {Object} NewUser
+ * @property {string} Name - The user's real name.
+ * @property {string} LastName - The user's last name.
+ * @property {string} UserName - The username for logging in.
+ * @property {string} Email - The user's email address.
+ * @property {number} Role - The user's role in the platform (e.g., 0 for regular user and 1 for moderator).
+ * @property {string} Password - The user's password for authentication.
  */
-export interface UserGetParams extends Pick<User, "id" | "name" | "username" | "lastname" | "email" | "role"> { };
+export interface NewUser extends Pick<User, "Name" | "LastName" | "UserName" | "Email" | "Role" | "Password"> { };
