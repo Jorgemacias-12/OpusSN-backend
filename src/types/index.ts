@@ -5,6 +5,15 @@ export interface UserCreationResponse {
   newUser: SafeUser
 }
 
+export interface CheckUsernameAvailabilityResponse {
+  isAvailable: boolean;
+  error?: {
+    code: string,
+    meta: string | unknown,
+    message: string,
+  }
+}
+
 export enum RESPONSE_CODES {
   OK = 200,
   CREATED = 201,
