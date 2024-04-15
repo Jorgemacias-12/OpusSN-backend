@@ -2,7 +2,7 @@ import { Get, Path, Post, Route, Response, SuccessResponse, Tags, Body, Put, Del
 import type { NewUser, SafeUser } from '../models/User';
 import { Prisma, PrismaClient } from '@prisma/client'
 import { hashPassword } from '../utils';
-import type { CheckUsernameAvailabilityResponse, UserCollectionResponse, UserCreationResponse } from '../types';
+import type { CheckUsernameAvailabilityResponse, UserCollectionResponse, UserCreationResponse, UserResponse } from '../types';
 
 // TODO: Define response types in the types folder
 
@@ -64,29 +64,45 @@ export default class UserController {
   }
 
   /**
-   *  Get an specified user by ID
-   * @param id ID of the user.
+   * Retrieves a specified user by their ID 
+   * @param {number} id  - The ID of the user to retrieve.
+   * @returns {Promise<UserReponse>} - A promise that resolves to a {@link UserResponse} object containing the user data if found, or an error message otherwise.
    */
   @Get("/{id}")
   public async getUser(
-    @Path() id: string
-  ) {
-    // const user = await this.prisma.user.findUnique({
-    //   where: {
-    //     id: Number.parseInt(id)
-    //   }
-    // })
+    @Path() id: number
+  ): Promise<UserResponse> {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id
+        }
+      });
 
-    // if (user === null) return null;
+      if (user === null) {
+        return {
+          user: null,
+          error: {
+            message: `Couldn't find user with id ${id}`
+          }
+        }
+      }
 
-    // return {
-    //   id: user.id,
-    //   name: user.Name,
-    //   lastname: user.LastName,
-    //   username: user.UserName,
-    //   email: user.Email,
-    //   role: user.Role
-    // }
+      return {
+        user
+      }
+    }
+    catch (err) {
+      return {
+        user: null,
+        error: {
+          message: `Error trying to get user with id ${id}}`
+        }
+      }
+    }
+    finally {
+      await this.prisma.$disconnect();
+    }
   }
 
   /**
