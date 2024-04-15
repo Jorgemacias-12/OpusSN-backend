@@ -1,8 +1,8 @@
 import { Get, Path, Post, Route, Response, SuccessResponse, Tags, Body, Put, Delete, } from 'tsoa'
-import type { User, UserCreationParams, UserGetParams } from '../models/User';
-import { PrismaClient } from '@prisma/client';
+import type { NewUser, SafeUser } from '../models/User';
+import { PrismaClient } from '@prisma/client'
 import { hashPassword } from '../utils';
-import type { GetUsersResponse } from '../types';
+import type { UserCreationResponse } from '../types';
 
 // TODO: Define response types in the types folder
 
@@ -20,32 +20,32 @@ export default class UserController {
    *  Gets a list with all of the users
    */
   @Get("/")
-  public async getUsers(): Promise<GetUsersResponse | undefined> {
-    try {
-      const users = await this.prisma.user.findMany();
-      const userCount = await this.prisma.user.count();
+  public async getUsers() {
+    // try {
+    //   const users = await this.prisma.user.findMany();
+    //   const userCount = await this.prisma.user.count();
 
-      const transformedUsers: UserGetParams[] = users.map(user => ({
-        id: user.id,
-        name: user.Name, // Transforma Name a name
-        lastname: user.LastName, // Transforma LastName a lastname
-        username: user.UserName, // Transforma UserName a username
-        email: user.Email, // Transforma Email a email
-        role: user.Role, // Transforma Role a role
-      }));
-      
-      return {
-        count: userCount,
-        users: transformedUsers
-      }
-    }
-    catch (err) {
-      console.error(err);
-      return undefined;
-    }
-    finally {
-      this.prisma.$disconnect();
-    }
+    //   const transformedUsers: UserGetParams[] = users.map(user => ({
+    //     id: user.id,
+    //     name: user.Name, // Transforma Name a name
+    //     lastname: user.LastName, // Transforma LastName a lastname
+    //     username: user.UserName, // Transforma UserName a username
+    //     email: user.Email, // Transforma Email a email
+    //     role: user.Role, // Transforma Role a role
+    //   }));
+
+    //   return {
+    //     count: userCount,
+    //     users: transformedUsers
+    //   }
+    // }
+    // catch (err) {
+    //   console.error(err);
+    //   return undefined;
+    // }
+    // finally {
+    //   this.prisma.$disconnect();
+    // }
   }
 
   /**
@@ -55,23 +55,23 @@ export default class UserController {
   @Get("/{id}")
   public async getUser(
     @Path() id: string
-  ): Promise<UserGetParams | undefined | null> {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: Number.parseInt(id)
-      }
-    })
+  ) {
+    // const user = await this.prisma.user.findUnique({
+    //   where: {
+    //     id: Number.parseInt(id)
+    //   }
+    // })
 
-    if (user === null) return null;
+    // if (user === null) return null;
 
-    return {
-      id: user.id,
-      name: user.Name,
-      lastname: user.LastName,
-      username: user.UserName,
-      email: user.Email,
-      role: user.Role
-    }
+    // return {
+    //   id: user.id,
+    //   name: user.Name,
+    //   lastname: user.LastName,
+    //   username: user.UserName,
+    //   email: user.Email,
+    //   role: user.Role
+    // }
   }
 
   /**
@@ -80,23 +80,62 @@ export default class UserController {
    *  
    */
   @Post("/")
-  public async createUser(@Body() user: UserCreationParams) {
-    const { name, lastname, username, email, password, role } = user;
+  public async createUser(@Body() user: NewUser): Promise<UserCreationResponse | null> {
 
-    const newUser = await this.prisma.user.create({
-      data: {
-        Name: name,
-        LastName: lastname,
-        UserName: username,
-        Email: email,
-        Password: await hashPassword(password),
-        Role: role
+    try {
+      // Call to hashPassword to encrypt password
+      // with 12 rounds of salt.
+      const newUser = await this.prisma.user.create({
+        data: {
+          Name: user.Name,
+          LastName: user.LastName,
+          UserName: user.UserName,
+          Email: user.Email,
+          Password: await hashPassword(user.Password),
+          Role: user.Role
+        }
+      });
+
+      const safeUser: SafeUser = {
+        id: newUser.id,
+        Name: newUser.Name,
+        LastName: newUser.LastName,
+        UserName: newUser.UserName,
+        Email: newUser.Email,
+        Role: newUser.Role
       }
-    })
 
-    await this.prisma.$disconnect();
+      const response: UserCreationResponse = {
+        message: "User creation went successfully",
+        newUser: safeUser
+      }
 
-    return newUser;
+      return response;
+    }
+    catch (err) {
+      console.error(err);
+      return null;
+    }
+    finally {
+      await this.prisma.$disconnect();
+    }
+
+    // const { name, lastname, username, email, password, role } = user;
+
+    // const newUser = await this.prisma.user.create({
+    //   data: {
+    //     Name: name,
+    //     LastName: lastname,
+    //     UserName: username,
+    //     Email: email,
+    //     Password: await hashPassword(password),
+    //     Role: role
+    //   }
+    // })
+
+    // await this.prisma.$disconnect();
+
+    // return newUser;
   }
 
   /**
@@ -107,9 +146,28 @@ export default class UserController {
   @Put("/{id}")
   public async updateUser(
     @Path() id: string,
-    @Body() user: any
+    @Body() user: {}
   ) {
+    // try {
+    //   const userId = Number.parseInt(id);
 
+    //   const updatedUser = await this.prisma.user.update({
+    //     where: {
+    //       id: userId
+    //     },
+    //     data: user,
+    //   });
+
+    //   return null;
+    //   // const response: UpdateUserResponse = {
+    //   //   message: "",
+    //   //   data: {}, 
+    //   // };
+    //   // return response;
+    // }
+    // catch (err) {
+
+    // }
   }
 
   /**
@@ -118,6 +176,48 @@ export default class UserController {
    */
   @Delete("/{id}")
   public async deleteUser(@Path() id: string) {
+    // try {
+    //   const deletedUser = await this.prisma.user.delete({
+    //     where: {
+    //       id: Number.parseInt(id)
+    //     }
+    //   })
 
+    //   const userInfo: UserGetParams = {
+    //     id: deletedUser.id,
+    //     name: deletedUser.Name,
+    //     lastname: deletedUser.LastName,
+    //     username: deletedUser.UserName,
+    //     email: deletedUser.Email,
+    //     role: deletedUser.Role
+    //   }
+
+    //   return userInfo;
+    // }
+    // catch (err) {
+    //   console.error(err);
+    //   return null;
+    // }
+    // finally {
+    //   await this.prisma.$disconnect();
+    // }
+  }
+
+  /**
+   * 
+   * @param username 
+   * @returns 
+   */
+  public async checkIfUsernameIsAvailable(username: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        UserName: username
+      },
+      select: {
+        id: true
+      }
+    })
+
+    return user === null;
   }
 }
