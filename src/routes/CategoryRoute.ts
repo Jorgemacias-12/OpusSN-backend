@@ -1,10 +1,18 @@
 import { Router, type Request, type Response } from "express";
 import type { ValidationChain } from "express-validator";
+import { hashPassword } from "../utils";
 
 export const categoryRouter = Router();
 
-categoryRouter.get('', (req: Request, res: Response) => {
-
+categoryRouter.get('', async (req: Request, res: Response) => {
+  
+  let response = await hashPassword("1234");
+  
+  res.json({
+    text: response,
+    length: response.length
+  });
+  // return await hashPassword("Quelocoxd");
 });
 
 categoryRouter.get('', (req: Request, res: Response) => {

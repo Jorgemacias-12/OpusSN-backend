@@ -2,7 +2,7 @@ import { Get, Path, Post, Route, Response, SuccessResponse, Tags, Body, Put, Del
 import type { NewUser, SafeUser } from '../models/User';
 import { Prisma, PrismaClient } from '@prisma/client'
 import { hashPassword } from '../utils';
-import type { CheckUsernameAvailabilityResponse, UserCollectionResponse, UserCreationResponse, UserResponse } from '../types';
+import type { CheckUsernameAvailabilityResponse, UserCollectionResponse, UserCreationResponse, UserDeletedResponse, UserResponse } from '../types';
 
 // TODO: Define response types in the types folder
 
@@ -206,7 +206,53 @@ export default class UserController {
    *  @param id The ID related to the user.
    */
   @Delete("/{id}")
-  public async deleteUser(@Path() id: string) {
+  public async deleteUser(@Path() id: number): Promise<UserDeletedResponse> {
+    try {
+      const deletedUser = await this.prisma.user.delete({
+        where: {
+          id
+        }
+      })
+
+      if (deletedUser === null) {
+        return {
+          message: null,
+          user: null,
+          error: {
+            code: "500",
+            message: "",
+            meta: null
+          }
+        }
+      }
+
+      return {
+        message: `user deletion with id ${id} went sucessfully`,
+        user: deletedUser,
+      }
+    }
+    catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        return {
+          message: null,
+          user: null,
+          error: {
+            code: error.code,
+            message: error.message,
+            meta: error.meta
+          }
+        };
+      } else {
+        return {
+          message: `Error deleting user with id ${id} Internal server error}`,
+          user: null,
+        };
+      }
+    }
+    finally {
+      await this.prisma.$disconnect();
+    }
+
     // try {
     //   const deletedUser = await this.prisma.user.delete({
     //     where: {

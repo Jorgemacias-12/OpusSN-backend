@@ -7,42 +7,228 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"UserCreationParams": {
-				"description": "This User representation is supposted to be used in the creation method\r\nin the UsersController.",
+			"User": {
 				"properties": {
-					"name": {
-						"type": "string",
-						"description": "User's real name"
+					"id": {
+						"type": "number",
+						"format": "double"
 					},
-					"username": {
-						"type": "string",
-						"description": "The name that will be displayed in the UI"
+					"Name": {
+						"type": "string"
 					},
-					"lastname": {
-						"type": "string",
-						"description": "User's lastname"
+					"LastName": {
+						"type": "string"
 					},
-					"email": {
-						"type": "string",
-						"description": "The email the user usted to register his account"
+					"UserName": {
+						"type": "string"
 					},
-					"role": {
-						"type": "integer",
-						"format": "int32",
-						"description": "His role in the Platform could be normal user or mod"
+					"Email": {
+						"type": "string"
 					},
-					"password": {
-						"type": "string",
-						"description": "The password that the user creates to authenticate with the \r\nsocial media."
+					"Password": {
+						"type": "string"
+					},
+					"Role": {
+						"type": "number",
+						"format": "double"
 					}
 				},
 				"required": [
-					"name",
-					"username",
-					"lastname",
-					"email",
-					"role",
-					"password"
+					"id",
+					"Name",
+					"LastName",
+					"UserName",
+					"Email",
+					"Password",
+					"Role"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"PrismaError": {
+				"properties": {
+					"code": {
+						"type": "string"
+					},
+					"meta": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{}
+						]
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"code",
+					"meta",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"UserCollectionResponse": {
+				"properties": {
+					"userCount": {
+						"type": "number",
+						"format": "double"
+					},
+					"users": {
+						"items": {
+							"$ref": "#/components/schemas/User"
+						},
+						"type": "array",
+						"nullable": true
+					},
+					"error": {
+						"$ref": "#/components/schemas/PrismaError"
+					}
+				},
+				"required": [
+					"userCount",
+					"users"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"SafeUser": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"Name": {
+						"type": "string"
+					},
+					"LastName": {
+						"type": "string"
+					},
+					"UserName": {
+						"type": "string"
+					},
+					"Email": {
+						"type": "string"
+					},
+					"Role": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"Name",
+					"LastName",
+					"UserName",
+					"Email",
+					"Role"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"UserResponse": {
+				"description": "Represents the response from a request to retrieve a user by their ID.",
+				"properties": {
+					"user": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/SafeUser"
+							}
+						],
+						"nullable": true,
+						"description": "The user data, or `null` if no user was found."
+					},
+					"error": {
+						"properties": {
+							"message": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"message"
+						],
+						"type": "object",
+						"description": "Optional error object containing information about any error that occurred during the request."
+					}
+				},
+				"required": [
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"UserCreationResponse": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"newUser": {
+						"$ref": "#/components/schemas/SafeUser"
+					}
+				},
+				"required": [
+					"message",
+					"newUser"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"NewUser": {
+				"properties": {
+					"Name": {
+						"type": "string"
+					},
+					"LastName": {
+						"type": "string"
+					},
+					"UserName": {
+						"type": "string"
+					},
+					"Email": {
+						"type": "string"
+					},
+					"Role": {
+						"type": "number",
+						"format": "double"
+					},
+					"Password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"Name",
+					"LastName",
+					"UserName",
+					"Email",
+					"Role",
+					"Password"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"UserDeletedResponse": {
+				"properties": {
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"user": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/SafeUser"
+							}
+						],
+						"nullable": true
+					},
+					"error": {
+						"$ref": "#/components/schemas/PrismaError"
+					}
+				},
+				"required": [
+					"message",
+					"user"
 				],
 				"type": "object",
 				"additionalProperties": true
@@ -61,11 +247,18 @@
 			"get": {
 				"operationId": "GetUsers",
 				"responses": {
-					"204": {
-						"description": "No content"
+					"200": {
+						"description": "- A promise that resolves to a    object containing an array of users and the user count, or null in case of  an error.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserCollectionResponse"
+								}
+							}
+						}
 					}
 				},
-				"description": "Gets a list with all of the users",
+				"description": "Retrieves a list of all users and the total user count.",
 				"tags": [
 					"Users"
 				],
@@ -80,41 +273,12 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"properties": {
-										"Role": {
-											"type": "number",
-											"format": "double"
-										},
-										"Password": {
-											"type": "string"
-										},
-										"Email": {
-											"type": "string"
-										},
-										"UserName": {
-											"type": "string"
-										},
-										"LastName": {
-											"type": "string"
-										},
-										"Name": {
-											"type": "string"
-										},
-										"id": {
-											"type": "number",
-											"format": "double"
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/UserCreationResponse"
 										}
-									},
-									"required": [
-										"Role",
-										"Password",
-										"Email",
-										"UserName",
-										"LastName",
-										"Name",
-										"id"
 									],
-									"type": "object"
+									"nullable": true
 								}
 							}
 						}
@@ -132,7 +296,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/UserCreationParams",
+								"$ref": "#/components/schemas/NewUser",
 								"description": "The data of the new user."
 							}
 						}
@@ -144,23 +308,31 @@
 			"get": {
 				"operationId": "GetUser",
 				"responses": {
-					"204": {
-						"description": "No content"
+					"200": {
+						"description": "- A promise that resolves to a    object containing the user data if found, or an error message otherwise.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserResponse"
+								}
+							}
+						}
 					}
 				},
-				"description": "Get an specified user by ID",
+				"description": "Retrieves a specified user by their ID",
 				"tags": [
 					"Users"
 				],
 				"security": [],
 				"parameters": [
 					{
-						"description": "ID of the user.",
+						"description": "- The ID of the user to retrieve.",
 						"in": "path",
 						"name": "id",
 						"required": true,
 						"schema": {
-							"type": "string"
+							"format": "double",
+							"type": "number"
 						}
 					}
 				]
@@ -194,6 +366,8 @@
 					"content": {
 						"application/json": {
 							"schema": {
+								"properties": {},
+								"type": "object",
 								"description": "The new data of the user"
 							}
 						}
@@ -203,8 +377,15 @@
 			"delete": {
 				"operationId": "DeleteUser",
 				"responses": {
-					"204": {
-						"description": "No content"
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserDeletedResponse"
+								}
+							}
+						}
 					}
 				},
 				"description": "Deletes an existent user.",
@@ -219,7 +400,8 @@
 						"name": "id",
 						"required": true,
 						"schema": {
-							"type": "string"
+							"format": "double",
+							"type": "number"
 						}
 					}
 				]
