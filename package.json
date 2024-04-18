@@ -29,7 +29,9 @@
     "build": "bun build ./server.ts --outdir ./build",
     "predev": "bun swagger || true",
     "prebuild": "bun swagger || true",
-    "swagger": "bun tsoa spec"
+    "swagger": "bun tsoa spec",
+    "db:migrate": "bun prisma migrate dev",
+    "db:client": "bun prisma generate client"
   },
   "prisma": {
     "schema": "./src/db/schema.prisma"
