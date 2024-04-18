@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Contenido del archivo .env
+envContent="PORT=3000
+DATABASE_URL=\"mysql://USER:PASSWORD@HOST:PORT/DATABASE\"
+PRISMA_SCHEMA=src/db/schema.prisma"
+
+echo "Configurando servidor. Por favor, espere..."
+
+# Verificar si bun está instalado
+if ! command -v bun &> /dev/null; then
+    echo "Bun no está instalado. Procediendo a la instalación..."
+    curl -fsSL https://bun.sh/install | bash
+    echo "Bun ha sido instalado con éxito."
+else
+    bunVersion=$(bun --version)
+    echo "Instalando... versión de bun: $bunVersion"
+fi
+
+# Instalar dependencias
+bun install
+echo "Dependencias instaladas"
+
+# Crear archivo .env
+currentPath=$(pwd)
+envFilePath="$currentPath/.env"
+echo "$envContent" > "$envFilePath"
+echo "Archivo .env creado"
+
+# Ejecutar migraciones de desarrollo
+bun prisma migrate dev
+echo "Migraciones ejecutadas con éxito."
+
+# Generar cliente de prisma
+bun prisma generate
+echo "Cliente generado con éxito"
+
+# Inicializar servidor de desarrollo
+echo "Inicializando servidor de desarrollo..."
+bun --watch ./server.ts

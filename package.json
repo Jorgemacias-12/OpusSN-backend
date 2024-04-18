@@ -30,8 +30,8 @@
     "predev": "bun swagger || true",
     "prebuild": "bun swagger || true",
     "swagger": "bun tsoa spec",
-    "db:migrate": "bun prisma migrate dev",
-    "db:client": "bun prisma generate client"
+    "setup:windows": ".\\main.ps1",
+    "setup:linux": "./setup"
   },
   "prisma": {
     "schema": "./src/db/schema.prisma"
