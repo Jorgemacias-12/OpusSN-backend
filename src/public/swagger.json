@@ -207,6 +207,31 @@
 				],
 				"type": "object",
 				"additionalProperties": true
+			},
+			"UserDeletedResponse": {
+				"properties": {
+					"message": {
+						"type": "string",
+						"nullable": true
+					},
+					"user": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/SafeUser"
+							}
+						],
+						"nullable": true
+					},
+					"error": {
+						"$ref": "#/components/schemas/PrismaError"
+					}
+				},
+				"required": [
+					"message",
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": true
 			}
 		},
 		"securitySchemes": {}
@@ -352,8 +377,15 @@
 			"delete": {
 				"operationId": "DeleteUser",
 				"responses": {
-					"204": {
-						"description": "No content"
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserDeletedResponse"
+								}
+							}
+						}
 					}
 				},
 				"description": "Deletes an existent user.",
@@ -368,7 +400,8 @@
 						"name": "id",
 						"required": true,
 						"schema": {
-							"type": "string"
+							"format": "double",
+							"type": "number"
 						}
 					}
 				]

@@ -20,10 +20,10 @@ userRouter.get('/', async (req: Request, res: Response) => {
     const response = await controller.CheckIfUsernameIsAvailable(UserName as string) as CheckUsernameAvailabilityResponse;
 
     if (response.error != null ||
-       response.error != undefined
-    ){
+      response.error != undefined
+    ) {
       res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json(response);
-      
+
       return;
     }
 
@@ -35,7 +35,7 @@ userRouter.get('/', async (req: Request, res: Response) => {
 
   if (response.error != null) {
     res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json(response);
-    
+
     return;
   }
 
@@ -59,7 +59,7 @@ userRouter.get('/:id', async (req: Request, res: Response) => {
     return res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json(response);
   }
 
-  res.json(response);  
+  res.json(response);
 });
 
 
@@ -184,24 +184,51 @@ let updateUserValidationChain: ValidationChain[] = [
 ]
 
 userRouter.put('/:id', updateUserValidationChain, async (req: Request, res: Response) => {
-  // const { id } = req.params;
-  // const { name, lastname, username, email, password, role } = req.body;
 
-  // const user: UserCreationParams = {
-  //   name,
-  //   lastname,
-  //   username,
-  //   email,
-  //   password,
-  //   role
-  // }
+  const { id } = req.params;
 
-  // const result = await controller.updateUser(id, user)
+  const parsedId = Number.parseInt(id);
 
-  // res.json(result);
+  if (isNaN(parsedId) || !Number.isInteger(parsedId) || parsedId <= 0) {
+    res.status(RESPONSE_CODES.BAD_REQUEST).json({
+      error: `Invalid user ID -> ${id}}`
+    });
+  }
+
+  // Get values from request body with object destruct
+  const { Name, LastName, UserName, Email, Password, Role } = req.body;
+
+  // Create NewUser type object
+  const newUser: NewUser = {
+    Name,
+    LastName,
+    UserName,
+    Email,
+    Password,
+    Role
+  }
+
+  const result = controller.updateUser(id, newUser);
+
+  res.status(RESPONSE_CODES.OK).json(result);
 });
 
 userRouter.delete('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const parsedId = Number.parseInt(id);
+
+  if (isNaN(parsedId) || !Number.isInteger(parsedId) || parsedId <= 0) {
+    res.status(RESPONSE_CODES.BAD_REQUEST).json({
+      error: `Invalid user ID -> ${id}}`
+    });
+  }
+
+  const response = await controller.deleteUser(parsedId);
+
+  console.log(response);
+
+  res.json(RESPONSE_CODES.OK).json(response);
   // const { id } = req.params;
 
   // const response = await controller.deleteUser(id);

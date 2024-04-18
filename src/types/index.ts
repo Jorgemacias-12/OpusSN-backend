@@ -59,6 +59,12 @@ export interface UserResponse {
   }
 }
 
+export interface UserDeletedResponse {
+  message: string | null;
+  user: SafeUser | null;
+  error?: PrismaError;
+}
+
 /**
  * Interface representing an error from Prisma.
  * @typedef {Object} PrismaError
