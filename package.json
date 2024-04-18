@@ -25,7 +25,11 @@
     "tsoa": "^6.2.0"
   },
   "scripts": {
-    
+    "dev": "bun --watch ./server.ts",
+    "build": "bun build ./server.ts --outdir ./build",
+    "predev": "bun swagger || true",
+    "prebuild": "bun swagger || true",
+    "swagger": "bun tsoa spec"
   },
   "prisma": {
     "schema": "./src/db/schema.prisma"
