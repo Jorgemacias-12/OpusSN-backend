@@ -1,8 +1,8 @@
 import { Get, Path, Post, Route, Response, SuccessResponse, Tags, Body, Put, Delete, } from 'tsoa'
-import type { NewUser, SafeUser } from '../models/User';
+import type { NewUser, SafeUser, User } from '../models/User';
 import { Prisma, PrismaClient } from '@prisma/client'
 import { hashPassword } from '../utils';
-import type { CheckUsernameAvailabilityResponse, UserCollectionResponse, UserCreationResponse, UserDeletedResponse, UserResponse } from '../types';
+import type { CheckUsernameAvailabilityResponse, UserCollectionResponse, UserCreationResponse, UserDeletedResponse, UserResponse, UserUpdatedResponse } from '../types';
 
 // TODO: Define response types in the types folder
 
@@ -170,36 +170,57 @@ export default class UserController {
   }
 
   /**
-   * Updates an existent user
-   * @param id The id of the user to be updated
-   * @param user The new data of the user
+   * Updates an existing user by their ID.
+   *
+   * @param {number} id - The ID of the user to be updated.
+   * @param {UserUpdatedResponse} user - The new data for the user.
+   * @returns {Promise<UserUpdatedResponse>} - A promise that resolves to a {@link UserUpdatedResponse} object containing the updated user and any potential error information.
    */
   @Put("/{id}")
   public async updateUser(
-    @Path() id: string,
-    @Body() user: {}
-  ) {
-    // try {
-    //   const userId = Number.parseInt(id);
+    @Path() id: number,
+    @Body() user: User
+  ): Promise<UserUpdatedResponse> {
+    try {
+      // Attempt to update the user with the new data
+      const updatedUser = await this.prisma.user.update({
+        where: {
+          id
+        },
+        data: user
+      });
 
-    //   const updatedUser = await this.prisma.user.update({
-    //     where: {
-    //       id: userId
-    //     },
-    //     data: user,
-    //   });
+      // const 
 
-    //   return null;
-    //   // const response: UpdateUserResponse = {
-    //   //   message: "",
-    //   //   data: {}, 
-    //   // };
-    //   // return response;
-    // }
-    // catch (err) {
-
-    // }
+      // Return the updated user and a success message
+      return {
+        message: 'User updated successfully',
+        user: updatedUser,
+      };
+    } catch (error) {
+      // Handle any errors that occurred during the update operation
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        return {
+          message: null,
+          user: null,
+          error: {
+            code: error.code,
+            message: error.message,
+            meta: error.meta
+          }
+        };
+      } else {
+        return {
+          message: `Error deleting user with id ${id} Internal server error}`,
+          user: null,
+        };
+      }
+    } finally {
+      // Ensure that the Prisma client is disconnected
+      await this.prisma.$disconnect();
+    }
   }
+
 
   /**
    *  Deletes an existent user.
