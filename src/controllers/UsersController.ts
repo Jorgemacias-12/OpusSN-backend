@@ -273,32 +273,6 @@ export default class UserController {
     finally {
       await this.prisma.$disconnect();
     }
-
-    // try {
-    //   const deletedUser = await this.prisma.user.delete({
-    //     where: {
-    //       id: Number.parseInt(id)
-    //     }
-    //   })
-
-    //   const userInfo: UserGetParams = {
-    //     id: deletedUser.id,
-    //     name: deletedUser.Name,
-    //     lastname: deletedUser.LastName,
-    //     username: deletedUser.UserName,
-    //     email: deletedUser.Email,
-    //     role: deletedUser.Role
-    //   }
-
-    //   return userInfo;
-    // }
-    // catch (err) {
-    //   console.error(err);
-    //   return null;
-    // }
-    // finally {
-    //   await this.prisma.$disconnect();
-    // }
   }
 
   /**
