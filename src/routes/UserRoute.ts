@@ -9,7 +9,6 @@ export const userRouter = Router();
 
 const controller = new UserController();
 
-//!! Use controller to return the desired json data
 userRouter.get('/', async (req: Request, res: Response) => {
   const { UserName, CheckIfExists } = req.query;
 
@@ -141,49 +140,7 @@ userRouter.post('/', createUserValidationChain, async (req: Request, res: Respon
   res.status(RESPONSE_CODES.CREATED).json(result);
 });
 
-// TODO: make const and define values
-let updateUserValidationChain: ValidationChain[] = [
-  body('Name')
-    .notEmpty()
-    .withMessage(createUserErrorMessages.nameRequired)
-    .isLength({ min: 4, max: 50 })
-    .withMessage(createUserErrorMessages.nameLength),
-
-  body('LastName')
-    .notEmpty()
-    .withMessage(createUserErrorMessages.lastnameRequired)
-    .isLength({ min: 5, max: 30 })
-    .withMessage(createUserErrorMessages.lastnameLength),
-
-  body('Email')
-    .notEmpty()
-    .withMessage(createUserErrorMessages.emailRequired)
-    .isLength({ min: 5, max: 50 })
-    .withMessage(createUserErrorMessages.emailLength)
-    .isEmail()
-    .withMessage(createUserErrorMessages.emailIsNotValid),
-
-  body('UserName')
-    .notEmpty()
-    .withMessage(createUserErrorMessages.usernameRequired)
-    .isLength({ min: 3, max: 15 })
-    .withMessage(createUserErrorMessages.usernameLength)
-    .matches(/^[a-zA-Z0-9_-]+$/)
-    .withMessage(createUserErrorMessages.usernameCharacters)
-    .custom(async (value) => {
-      let userExists: boolean = false;
-
-      if (userExists) {
-        throw new Error(createUserErrorMessages.usernameAlreadyExists);
-      }
-    }),
-
-  body('Password')
-    .notEmpty()
-    .withMessage(createUserErrorMessages.passwordRequired)
-]
-
-userRouter.put('/:id', updateUserValidationChain, async (req: Request, res: Response) => {
+userRouter.put('/:id', async (req: Request, res: Response) => {
 
   const { id } = req.params;
 
@@ -199,7 +156,8 @@ userRouter.put('/:id', updateUserValidationChain, async (req: Request, res: Resp
   const { Name, LastName, UserName, Email, Password, Role } = req.body;
 
   // Create NewUser type object
-  const newUser: NewUser = {
+  const newUser: User = {
+    id: Number.parseInt(id),
     Name,
     LastName,
     UserName,
@@ -208,7 +166,7 @@ userRouter.put('/:id', updateUserValidationChain, async (req: Request, res: Resp
     Role
   }
 
-  const result = controller.updateUser(id, newUser);
+  const result = await controller.updateUser(parsedId, newUser);
 
   res.status(RESPONSE_CODES.OK).json(result);
 });
@@ -229,18 +187,4 @@ userRouter.delete('/:id', async (req: Request, res: Response) => {
   console.log(response);
 
   res.json(RESPONSE_CODES.OK).json(response);
-  // const { id } = req.params;
-
-  // const response = await controller.deleteUser(id);
-
-  // if (response === null) {
-  //   res.status(RESPONSE_CODES.NOT_FOUND).json({
-  //     message: `El usuario con ${id}, no se ha podido eliminar`
-  //   })
-  // }
-
-  // res.json({
-  //   message: "User deleted sucessfully",
-  //   userDeletedData: response,
-  // });
 });
