@@ -6,7 +6,7 @@
     "name": "Opus REST API",
     "description": "REST API for the social media Opus, a place where you can talk about technology.",
     "specVersion": 3,
-    "outputDirectory": "./src/public",
+    "outputDirectory": "./build/public",
     "host": "localhost:4000"
   },
   "routes": {

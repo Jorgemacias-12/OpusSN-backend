@@ -59,9 +59,60 @@ export interface UserResponse {
   }
 }
 
+/**
+ * Represents the response from a request to delete a user.
+ *
+ * @interface UserDeletedResponse
+ */
 export interface UserDeletedResponse {
+  /**
+   * A message indicating the outcome of the delete operation.
+   *
+   * @type {string | null}
+   */
   message: string | null;
+
+  /**
+   * The deleted user data as a SafeUser, or `null` if the deletion was unsuccessful.
+   *
+   * @type {SafeUser | null}
+   */
   user: SafeUser | null;
+
+  /** @swagger
+   * Optional error object containing information about any error that occurred during the request.
+   *
+   * @property {PrismaError} [error] - An object representing the error, if any occurred.
+   */
+  error?: PrismaError;
+}
+
+
+/**
+ * Represents the response from a request to update a user.
+ *
+ * @interface UserUpdatedResponse
+ */
+export interface UserUpdatedResponse {
+  /**
+   * A message indicating the outcome of the update operation.
+   *
+   * @type {string | null}
+   */
+  message: string | null;
+
+  /**
+   * The updated user data, or `null` if the update was unsuccessful.
+   *
+   * @type {User | null}
+   */
+  user: User | null;
+
+  /**
+   * Optional error object containing information about any error that occurred during the request.
+   *
+   * @property {PrismaError} [error] - An object representing the error, if any occurred.
+   */
   error?: PrismaError;
 }
 

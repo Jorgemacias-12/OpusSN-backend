@@ -4,7 +4,12 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import swaggerUi from 'swagger-ui-express';
 import { categoryRouter, postRouter, userRouter } from './src/routes';
-import swaggerDocument from './src/public/swagger.json'
+import swaggerDocument from './build/public/swagger.json'
+import { fileURLToPath } from 'bun';
+import { dirname, join } from 'path'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const PORT = process.env.PORT || 3000;
 const app: Express = express();
@@ -15,7 +20,8 @@ app.use(cors());
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("./src/public"));
+// app.use(express.static("./build/public"));
+app.use(express.static(join(__dirname, 'build/public')));
 
 // Disable powered by 
 app.disable('x-powered-by');

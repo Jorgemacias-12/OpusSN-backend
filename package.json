@@ -26,7 +26,7 @@
   },
   "scripts": {
     "dev": "bun --watch ./server.ts",
-    "build": "bun build ./server.ts --outdir ./build",
+    "build": "bun build --target=bun ./server.ts --outdir ./build",
     "predev": "bun swagger || true",
     "prebuild": "bun swagger || true",
     "swagger": "bun tsoa spec",
