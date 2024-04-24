@@ -6,13 +6,6 @@ export const categoryRouter = Router();
 
 categoryRouter.get('', async (req: Request, res: Response) => {
   
-  let response = await hashPassword("1234");
-  
-  res.json({
-    text: response,
-    length: response.length
-  });
-  // return await hashPassword("Quelocoxd");
 });
 
 categoryRouter.get('', (req: Request, res: Response) => {
@@ -33,7 +26,7 @@ let updateCategoryValidationChain: ValidationChain[] = [
 
 ]
 
-categoryRouter.post('', (req: Request, res: Response) => {
+categoryRouter.put('', (req: Request, res: Response) => {
 
 });
 
