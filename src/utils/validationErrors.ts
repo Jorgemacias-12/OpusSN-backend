@@ -12,3 +12,8 @@ export const createUserErrorMessages = {
   usernameAlreadyExists: 'El nombre de usuario se encuentra en uso :C',
   passwordRequired: 'No puedes dejar el campo de contraseña vacio'
 }
+
+export const createCategoryErrorMessages = {
+  categoryNameRequired: 'El nombre de la categoría no debe estar vacio.',
+  categoryLength: 'El tamaño de la categoría debe ser entre 5 y 20 caracteres'
+}
