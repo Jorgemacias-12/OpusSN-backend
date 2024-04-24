@@ -1,3 +1,4 @@
+import type { Category } from "../models/Category";
 import type { SafeUser, User } from "../models/User";
 
 /**
@@ -127,6 +128,37 @@ export interface PrismaError {
   code: string;
   meta: string | unknown;
   message: string;
+}
+
+
+export interface CategoryCreationResponse {
+  message?: string | null;
+  category: Category | null
+  error?: PrismaError
+}
+
+export interface CategoryCollectionReponse {
+  categories: Category[] | null;
+  categoryCount: number;
+  error?: PrismaError;
+}
+
+export interface CheckCategoryAvailabilityResponse {
+  isAvailable: boolean | null; 
+  error?: PrismaError;
+}
+
+export interface CategoryDeletionResponse {
+  message?: string | null;
+  category: Category | null;
+  error?: PrismaError
+}
+
+export interface CategoryResponse {
+  category: Category | null;
+  error?: {
+    message: string;
+  }
 }
 
 /**
