@@ -42,3 +42,7 @@ export interface SafeUser extends Pick<User, "id" | "Name" | "LastName" | "UserN
  * @property {string} Password - The user's password for authentication.
  */
 export interface NewUser extends Pick<User, "Name" | "LastName" | "UserName" | "Email" | "Role" | "Password"> { };
+
+export interface UserID {
+  id: number;
+}
