@@ -4,3 +4,5 @@ export interface Category {
 }
 
 export interface NewCategory extends Pick<Category, "Name"> { };
+
+export interface PostCategory extends Pick<Category, "id"> { };
