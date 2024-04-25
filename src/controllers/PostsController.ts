@@ -26,17 +26,25 @@ export class PostsController {
           Title: post.Title,
           Content: post.Content,
           CreationDate: toIsoDate(post.CreationDate),
-          user: { connect: { id: post.User } },
-          categories: {
-            connect: post.PostCategory.map((categoryId: number) => ({ id: categoryId }))
+          User: { connect: { id: post.User } },
+          Categories: {
+            connect: post.Categories.map((categoryId: number) => ({ id: categoryId }))
           }
         }
       });
 
       return {
-        message: "¡Post created sucessfully!",
-        post: newPost
+        message: "¡Post creado exitosamente!",
+        post: {
+          id: newPost.id,
+          Title: newPost.Title,
+          Content: newPost.Content,
+          Categories: post.Categories.map((categoryId: number) => categoryId),
+          CreationDate: newPost.CreationDate,
+          User: newPost.userId
+        }
       }
+
     }
     catch (err) {
       console.error(err)
