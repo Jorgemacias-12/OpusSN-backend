@@ -24,8 +24,8 @@ model Post {
   Content      String     @db.MediumText
   CreationDate DateTime   @db.Date
   UpdateDate   DateTime?  @db.Date
-  categories   Category[]
-  user         User       @relation(fields: [userId], references: [id])
+  Categories   Category[]
+  User         User       @relation(fields: [userId], references: [id])
   userId       Int
 }
 
