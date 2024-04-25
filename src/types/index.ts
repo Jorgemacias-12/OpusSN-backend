@@ -1,5 +1,5 @@
 import type { Category, PostCategory } from "../models/Category";
-import type { Post } from "../models/Post";
+import type { Post, PrismaPost } from "../models/Post";
 import type { SafeUser, User, UserID } from "../models/User";
 
 /**
@@ -177,6 +177,15 @@ export interface PostCreationReponse {
     message: string;
   }
 }
+
+export interface PostsResponse {
+  posts: PrismaPost[] | null;
+  postCount?: number;
+  error?: {
+    message: string
+  }
+}
+
 
 
 /**

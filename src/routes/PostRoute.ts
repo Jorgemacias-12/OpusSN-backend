@@ -12,7 +12,14 @@ export const postRouter = Router();
 const controller = new PostsController();
 
 postRouter.get('/', async (req: Request, res: Response) => {
+  const response = await controller.getPosts();
 
+  if (response.error) {
+    res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json(response);
+    return;
+  }
+
+  res.status(RESPONSE_CODES.OK).json(response);
 });
 
 

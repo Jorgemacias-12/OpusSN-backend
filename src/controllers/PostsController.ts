@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { Body, Post, Route, Tags } from "tsoa";
+import { Body, Get, Post, Route, Tags } from "tsoa";
 import type { NewPost, } from "../models/Post";
-import type { PostCreationReponse } from "../types";
+import type { PostCreationReponse, PostsResponse } from "../types";
 import { toIsoDate } from "../utils";
 import type { PostCategory } from "../models/Category";
 
@@ -10,8 +10,28 @@ import type { PostCategory } from "../models/Category";
 export class PostsController {
   prisma = new PrismaClient();
 
-  public async getPosts() {
+  @Get("/")
+  public async getPosts(): Promise<PostsResponse> {
+    try {
+      const posts = await this.prisma.post.findMany() ;
+      const postCount = await this.prisma.post.count();
 
+      return {
+        posts,
+        postCount
+      }
+    }
+    catch (error) {
+      return {
+        posts: null,
+        error: {
+          message: `Error ${error}`
+        }
+      }
+    }
+    finally {
+      await this.prisma.$disconnect();
+    }
   }
 
   public async getPost() {
