@@ -17,3 +17,12 @@ export const createCategoryErrorMessages = {
   categoryNameRequired: 'El nombre de la categoría no debe estar vacio.',
   categoryLength: 'El tamaño de la categoría debe ser entre 5 y 20 caracteres'
 }
+
+export const createPostErrorMessages = {
+  postTitleRequired: 'Para crear un post necesitas nombrarlo',
+  postTitleLength: 'El titulo de un post debe estar entre 5 y 40 caracteres',
+  postContentRequired: 'No puedes publicar un post vació.',
+  postDateRequired: 'La fecha de creación del post es requerida',
+  postIsValidDate: 'La fecha de creación no es válida',
+  postCategoryRequired: 'Al menos una categoría es necesaria para crear un post'
+}
