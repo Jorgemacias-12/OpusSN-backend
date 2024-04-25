@@ -1,5 +1,6 @@
-import type { Category } from "../models/Category";
-import type { SafeUser, User } from "../models/User";
+import type { Category, PostCategory } from "../models/Category";
+import type { Post } from "../models/Post";
+import type { SafeUser, User, UserID } from "../models/User";
 
 /**
  * Response interface for user creation.
@@ -144,7 +145,7 @@ export interface CategoryCollectionReponse {
 }
 
 export interface CheckCategoryAvailabilityResponse {
-  isAvailable: boolean | null; 
+  isAvailable: boolean | null;
   error?: PrismaError;
 }
 
@@ -160,6 +161,23 @@ export interface CategoryResponse {
     message: string;
   }
 }
+
+export interface PostResponse {
+  post: Post | null;
+  error?: {
+    message: string;
+  }
+}
+
+
+export interface PostCreationReponse {
+  message?: string;
+  post: Post | null;
+  error?: {
+    message: string;
+  }
+}
+
 
 /**
  * Enumeration of possible response codes.

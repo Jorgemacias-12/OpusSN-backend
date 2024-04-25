@@ -37,7 +37,7 @@ const postValidationChain: ValidationChain[] = [
     .custom((value) => !isValidDate(value))
     .withMessage(createPostErrorMessages.postIsValidDate),
 
-  body('PostCategory')
+  body('Categories')
     .notEmpty()
     .withMessage(createPostErrorMessages.postCategoryRequired)
 ]
@@ -49,14 +49,15 @@ postRouter.post('/', postValidationChain, async (req: Request, res: Response) =>
     return res.status(RESPONSE_CODES.BAD_REQUEST).json(errors);
   }
 
-  const { Title, Content, CreationDate, UpdateDate, PostCategory, User } = req.body;
+  const { Title, Content, CreationDate, UpdateDate, Categories, User } = req.body;
+
 
   const newPost: NewPost = {
     Title,
     Content,
     CreationDate,
     UpdateDate,
-    PostCategory,
+    Categories,
     User
   }
 
