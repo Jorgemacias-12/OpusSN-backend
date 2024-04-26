@@ -18,3 +18,12 @@ export interface NewPost {
   Categories: number[];
   User: number;
 }
+
+export interface UpdatePost {
+  id: number;
+  Title: string;
+  Content: string;
+  UpdateDate: Date;
+  Categories: Category[];
+  userId: number;
+}

@@ -185,6 +185,19 @@ export interface PostCreationReponse {
   }
 }
 
+export interface PostUpdateResponse {
+  updatedPost: BasePost | null,
+  message: string;
+}
+
+export interface PostDeleteResponse {
+  deletedPost?: BasePost | null;
+  message?: string;
+  error?: {
+    message: string;
+  }
+}
+
 /**
  * Enumeration of possible response codes.
  * @enum {number}

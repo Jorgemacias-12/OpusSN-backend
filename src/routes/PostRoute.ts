@@ -2,9 +2,9 @@ import { Router, type Request, type Response } from "express";
 import { body, validationResult, type ValidationChain } from "express-validator";
 import { createPostErrorMessages } from "../utils/validationErrors";
 import { RESPONSE_CODES } from "../types";
-import type { NewPost } from "../models/Post";
 import { PostsController } from "../controllers/PostsController";
-import { isValidDate } from "../utils";
+import { isValidDate, toIsoDate } from "../utils";
+import type { NewPost, UpdatePost } from "../models/Post";
 
 export const postRouter = Router();
 
@@ -29,7 +29,7 @@ postRouter.get('/:id', async (req: Request, res: Response) => {
 
   if (isNaN(parsedId) || !Number.isInteger(parsedId) || parsedId <= 0) {
     res.status(RESPONSE_CODES.BAD_REQUEST).json({
-      error: `Invalid category id ${id}`
+      error: `Invalid post id ${id}`
     })
   }
 
@@ -92,10 +92,71 @@ postRouter.post('/', postValidationChain, async (req: Request, res: Response) =>
   res.status(RESPONSE_CODES.CREATED).json(result);
 });
 
-postRouter.put('/:id', postValidationChain, async (req: Request, res: Response) => {
+// const updatePostValidationChain: ValidationChain[] = [
+//   body('Title')
+//     .notEmpty()
+//     .withMessage(createPostErrorMessages.postTitleRequired)
+//     .isLength({ min: 5, max: 40 })
+//     .withMessage(createPostErrorMessages.postTitleLength),
 
+//   body('Content')
+//     .notEmpty()
+//     .withMessage(createPostErrorMessages.postContentRequired),
+
+//   body('UpdateDate')
+//     .notEmpty()
+//     .withMessage(createPostErrorMessages.postUpdateDateRequired)
+//     .custom((value) => !isValidDate(value))
+//     .withMessage(createPostErrorMessages.postUpdateDateIsValid),
+
+//   body('Categories')
+//     .notEmpty()
+//     .withMessage(createPostErrorMessages.postCategoryRequired)
+// ]
+
+postRouter.put('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const parsedId = parseInt(id);
+
+  if (isNaN(parsedId) || !Number.isInteger(parsedId) || parsedId <= 0) {
+    res.status(RESPONSE_CODES.BAD_REQUEST).json({
+      error: `Invalid post id ${id}`
+    })
+  }
+
+  const { Title, Content, UpdateDate, Categories, userId } = req.body;
+
+  const updatePost: UpdatePost = {
+    id: parsedId,
+    Title,
+    Content,
+    UpdateDate,
+    Categories,
+    userId
+  }
+
+  const response = await controller.updatePost(updatePost);
+
+  res.status(RESPONSE_CODES.OK).json(response);
 });
 
 postRouter.delete('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
 
+  const parsedId = parseInt(id);
+
+  if (isNaN(parsedId) || !Number.isInteger(parsedId) || parsedId <= 0) {
+    res.status(RESPONSE_CODES.BAD_REQUEST).json({
+      error: `Invalid post id ${id}`
+    })
+  }
+
+  const response = await controller.deletePost(parsedId);
+
+  if (response.error) {
+    res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json(response);
+  }
+
+  res.status(RESPONSE_CODES.OK).json(response);
 }); 

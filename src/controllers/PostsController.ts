@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { Body, Get, Post, Put, Query, Route, Tags } from "tsoa";
-import type { PostCreationReponse, PostResponse, PostsReponse } from "../types";
-import type { BasePost, NewPost } from "../models/Post";
+import { Body, Delete, Get, Post, Put, Query, Route, Tags } from "tsoa";
+import type { PostCreationReponse, PostDeleteResponse, PostResponse, PostUpdateResponse, PostsReponse } from "../types";
+import type { BasePost, NewPost, UpdatePost } from "../models/Post";
 import { toIsoDate } from "../utils";
 
 @Route("/posts")
@@ -115,12 +115,70 @@ export class PostsController {
     }
   }
 
-  @Put()
-  public async updatePost(@Body() post: any) {
+  @Put("/:id")
+  public async updatePost(@Body() post: UpdatePost): Promise<PostUpdateResponse> {
+    try {
+      const updateData: any = {
+        Title: post.Title,
+        Content: post.Content,
+        UpdateDate: post.UpdateDate
+      };
 
+      if (post.Categories) {
+        updateData.categories = {
+          connect: post.Categories.map((cat) => ({ id: cat.id }))
+        };
+      }
+
+      const updatedPost = await this.prisma.post.update({
+        where: { id: post.id },
+        data: updateData,
+        include: {
+          Categories: true
+        }
+      })
+
+      return {
+        message: "Updating post operation went successfully",
+        updatedPost
+      }
+    }
+    catch (error) {
+      throw error;
+    }
+    finally {
+      await this.prisma.$disconnect();
+    }
   }
 
-  public async deletePost() {
+  @Delete("/:id")
+  public async deletePost(@Query() id: number): Promise<PostDeleteResponse> {
+    try {
+      const existingPost = await this.prisma.post.findUnique({
+        where: { id },
+      });
 
+      if (!existingPost) {
+        throw new Error(`Post with ID ${id} not found`);
+      }
+
+      const deletedPost = await this.prisma.post.delete({
+        where: { id },
+        include: {
+          Categories: true
+        }
+      });
+
+      return {
+        message: `Post with ID: ${id} has been deleted successfully`,
+        deletedPost: deletedPost
+      }
+    }
+    catch (error) {
+      return { error: { message: `Error deleting post: ${error}` } };
+    }
+    finally {
+      await this.prisma.$disconnect();
+    }
   }
 }

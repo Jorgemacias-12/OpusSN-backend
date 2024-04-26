@@ -24,5 +24,7 @@ export const createPostErrorMessages = {
   postContentRequired: 'No puedes publicar un post vació.',
   postDateRequired: 'La fecha de creación del post es requerida',
   postIsValidDate: 'La fecha de creación no es válida',
-  postCategoryRequired: 'Al menos una categoría es necesaria para crear un post'
+  postCategoryRequired: 'Al menos una categoría es necesaria para crear un post',
+  postUpdateDateRequired: 'Es necesaria al menos una fecha válida para poder actulizar el post',
+  postUpdateDateIsValid: 'La fecha de actualización no es válida',
 }
