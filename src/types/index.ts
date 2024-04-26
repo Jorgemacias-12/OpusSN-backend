@@ -163,7 +163,7 @@ export interface CategoryResponse {
 }
 
 export interface PostResponse {
-  post: Post | null;
+  post: PrismaPost | null;
   error?: {
     message: string;
   }
