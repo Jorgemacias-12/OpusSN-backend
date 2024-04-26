@@ -1,5 +1,5 @@
 import type { Category, PostCategory } from "../models/Category";
-import type { Post, PrismaPost } from "../models/Post";
+import type { BasePost, NewPost } from "../models/Post";
 import type { SafeUser, User, UserID } from "../models/User";
 
 /**
@@ -163,7 +163,27 @@ export interface CategoryResponse {
 }
 
 
+export interface PostResponse {
+  post: BasePost | null,
+  error?: {
+    message: string;
+  }
+}
 
+export interface PostsReponse {
+  posts: BasePost[] | null;
+  postCount?: number;
+  error?: {
+    message: string;
+  }
+}
+
+export interface PostCreationReponse {
+  createdPost: BasePost | null,
+  error?: {
+    message: string;
+  }
+}
 
 /**
  * Enumeration of possible response codes.
