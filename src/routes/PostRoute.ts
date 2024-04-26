@@ -5,7 +5,6 @@ import { RESPONSE_CODES } from "../types";
 import type { NewPost } from "../models/Post";
 import { PostsController } from "../controllers/PostsController";
 import { isValidDate } from "../utils";
-import type { UserID } from "../models/User";
 
 export const postRouter = Router();
 
@@ -24,7 +23,23 @@ postRouter.get('/', async (req: Request, res: Response) => {
 
 
 postRouter.get('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
 
+  const parsedId = parseInt(id);
+
+  if (isNaN(parsedId) || !Number.isInteger(parsedId) || parsedId <= 0) {
+    res.status(RESPONSE_CODES.BAD_REQUEST).json({
+      error: `Invalid category id ${id}`
+    })
+  }
+
+  const response = await controller.getPost(parsedId);
+
+  if (response.error) {
+    res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json(response);
+  }
+
+  res.status(RESPONSE_CODES.OK).json(response);
 });
 
 const postValidationChain: ValidationChain[] = [
