@@ -31,6 +31,6 @@ model Post {
 
 model Category {
   id    Int    @id @default(autoincrement())
-  Name  String @db.VarChar(20)
+  Name  String @db.VarChar(30)
   posts Post[] 
 }
