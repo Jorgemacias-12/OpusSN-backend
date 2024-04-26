@@ -172,7 +172,7 @@ export interface PostResponse {
 
 export interface PostCreationReponse {
   message?: string;
-  post: Post | null;
+  post: PrismaPost | null;
   error?: {
     message: string;
   }

@@ -15,7 +15,8 @@ export interface PrismaPost {
   id: number;
   Title: string;
   Content: string;
-  CreationDate: Date;
+  CreationDate: Date | null;
+  // Categories: number[]
   UpdateDate?: Date | null;
   userId: number;
 }
