@@ -162,29 +162,6 @@ export interface CategoryResponse {
   }
 }
 
-export interface PostResponse {
-  post: PrismaPost | null;
-  error?: {
-    message: string;
-  }
-}
-
-
-export interface PostCreationReponse {
-  message?: string;
-  post: PrismaPost | null;
-  error?: {
-    message: string;
-  }
-}
-
-export interface PostsResponse {
-  posts: PrismaPost[] | null;
-  postCount?: number;
-  error?: {
-    message: string
-  }
-}
 
 
 

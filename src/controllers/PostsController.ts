@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Body, Get, Post, Put, Query, Route, Tags } from "tsoa";
-import type { NewPost, PrismaPost, } from "../models/Post";
+import type { NewPost, PrismaPost, UpdatePost, } from "../models/Post";
 import type { PostCreationReponse, PostResponse, PostsResponse } from "../types";
 import { toIsoDate } from "../utils";
 import type { PostCategory } from "../models/Category";
@@ -63,35 +63,7 @@ export class PostsController {
   @Post("/")
   public async createPost(@Body() post: NewPost): Promise<PostCreationReponse> {
     try {
-      const user = await this.prisma.user.findUnique({
-        where: { id: post.User }
-      });
-
-      if (!user) {
-        throw new Error(`User with id ${post.User} not found}`)
-      }
-
-      const existingCategories = await this.prisma.category.findMany({
-        where: { id: { in: post.Categories } }
-      })
-
-      if (existingCategories.length !== post.Categories.length) {
-        throw new Error('One or more categories specified are non existent');
-      }
-
-      const newPost = await this.prisma.post.create({
-        data: {
-          Title: post.Title,
-          Content: post.Content,
-          CreationDate: toIsoDate(post.CreationDate),
-          User: { connect: { id: post.User } },
-          Categories: { connect: existingCategories.map((category) => ({ id: category.id })) }
-        }
-      })
-
-      return {
-        post: newPost
-      }
+      
     }
     catch (err) {
       console.error(err)
@@ -108,7 +80,7 @@ export class PostsController {
   }
 
   @Put()
-  public async updatePost(@Query() id: number, @Body() post: PrismaPost) {
+  public async updatePost(@Body() post: UpdatePost) {
 
   }
 
