@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Body, Get, Post, Route, Tags } from "tsoa";
+import { Body, Get, Post, Query, Route, Tags } from "tsoa";
 import type { NewPost, } from "../models/Post";
 import type { PostCreationReponse, PostResponse, PostsResponse } from "../types";
 import { toIsoDate } from "../utils";
@@ -35,7 +35,7 @@ export class PostsController {
   }
 
   @Get("/:id")
-  public async getPost(@Body() id: number): Promise<PostResponse> {
+  public async getPost(@Query() id: number): Promise<PostResponse> {
     try {
       const post = await this.prisma.post.findUnique({
         where: {
