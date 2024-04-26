@@ -27,10 +27,19 @@ model Post {
   Categories   Category[]
   User         User       @relation(fields: [userId], references: [id])
   userId       Int
+  Comment      Comment[]
 }
 
 model Category {
   id    Int    @id @default(autoincrement())
   Name  String @db.VarChar(30)
-  posts Post[] 
+  posts Post[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  Content   String   @db.MediumText
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
 }
