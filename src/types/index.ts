@@ -1,4 +1,5 @@
 import type { Category, PostCategory } from "../models/Category";
+import type { CommentBase, ResponseComment } from "../models/Comment";
 import type { BasePost, NewPost } from "../models/Post";
 import type { SafeUser, User, UserID } from "../models/User";
 
@@ -198,6 +199,13 @@ export interface PostDeleteResponse {
   }
 }
 
+export interface CommentCreationResponse {
+  comment: ResponseComment; 
+  error?: {
+    message: string;
+  }
+  message?: string 
+}
 /**
  * Enumeration of possible response codes.
  * @enum {number}

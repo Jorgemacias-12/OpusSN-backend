@@ -5,10 +5,12 @@ import { RESPONSE_CODES } from "../types";
 import { PostsController } from "../controllers/PostsController";
 import { isValidDate, toIsoDate } from "../utils";
 import type { NewPost, UpdatePost } from "../models/Post";
+import { CommentsControler } from "../controllers/CommentsController";
 
 export const postRouter = Router();
 
 const controller = new PostsController();
+const commentController = new CommentsControler();
 
 postRouter.get('/', async (req: Request, res: Response) => {
   const response = await controller.getPosts();
@@ -91,28 +93,6 @@ postRouter.post('/', postValidationChain, async (req: Request, res: Response) =>
 
   res.status(RESPONSE_CODES.CREATED).json(result);
 });
-
-// const updatePostValidationChain: ValidationChain[] = [
-//   body('Title')
-//     .notEmpty()
-//     .withMessage(createPostErrorMessages.postTitleRequired)
-//     .isLength({ min: 5, max: 40 })
-//     .withMessage(createPostErrorMessages.postTitleLength),
-
-//   body('Content')
-//     .notEmpty()
-//     .withMessage(createPostErrorMessages.postContentRequired),
-
-//   body('UpdateDate')
-//     .notEmpty()
-//     .withMessage(createPostErrorMessages.postUpdateDateRequired)
-//     .custom((value) => !isValidDate(value))
-//     .withMessage(createPostErrorMessages.postUpdateDateIsValid),
-
-//   body('Categories')
-//     .notEmpty()
-//     .withMessage(createPostErrorMessages.postCategoryRequired)
-// ]
 
 postRouter.put('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
