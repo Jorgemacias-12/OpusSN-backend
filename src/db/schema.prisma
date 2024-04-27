@@ -8,14 +8,15 @@ generator client {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  Name     String @db.VarChar(50)
-  LastName String @db.VarChar(30)
-  UserName String @unique @db.VarChar(15)
-  Email    String @unique @db.VarChar(50)
-  Password String @db.VarChar(60)
-  Role     Int    @db.TinyInt
+  id       Int       @id @default(autoincrement())
+  Name     String    @db.VarChar(50)
+  LastName String    @db.VarChar(30)
+  UserName String    @unique @db.VarChar(15)
+  Email    String    @unique @db.VarChar(50)
+  Password String    @db.VarChar(60)
+  Role     Int       @db.TinyInt
   posts    Post[]
+  Comment  Comment[]
 }
 
 model Post {
@@ -39,7 +40,9 @@ model Category {
 model Comment {
   id        Int      @id @default(autoincrement())
   Content   String   @db.MediumText
-  createdAt DateTime @default(now())
-  post      Post     @relation(fields: [postId], references: [id])
+  CreatedAt DateTime @default(now())
+  Post      Post     @relation(fields: [postId], references: [id])
   postId    Int
+  User      User     @relation(fields: [userId], references: [id])
+  userId    Int
 }
