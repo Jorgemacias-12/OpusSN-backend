@@ -74,7 +74,7 @@ export default class UserController {
       if (!user) throw user;
 
       // Check if the password is same
-      const result = verifyPassword(userCreedentials.Password, user.Password);
+      const result = await verifyPassword(userCreedentials.Password, user.Password);
 
       if (!result) {
         return {
