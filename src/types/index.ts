@@ -206,6 +206,15 @@ export interface CommentCreationResponse {
   }
   message?: string 
 }
+
+export interface UserAuthenticationResponse {
+  user: SafeUser | null;
+  error?: {
+    message: string;
+  }
+  message?: string;
+} 
+
 /**
  * Enumeration of possible response codes.
  * @enum {number}

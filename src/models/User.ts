@@ -46,3 +46,5 @@ export interface NewUser extends Pick<User, "Name" | "LastName" | "UserName" | "
 export interface UserID {
   id: number;
 }
+
+export interface LoginUser extends Pick<User, "Email" | "Password"> { };
