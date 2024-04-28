@@ -3,7 +3,7 @@ import { body, validationResult, type ValidationChain } from 'express-validator'
 import UserController from "../controllers/UsersController";
 import { createUserErrorMessages } from "../utils/validationErrors";
 import { RESPONSE_CODES, type CheckUsernameAvailabilityResponse, type UserCollectionResponse, type UserCreationResponse, type UserResponse } from "../types";
-import type { NewUser, User } from "../models/User";
+import type { LoginUser, NewUser, User } from "../models/User";
 
 export const userRouter = Router();
 
@@ -36,6 +36,28 @@ userRouter.get('/', async (req: Request, res: Response) => {
     res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json(response);
 
     return;
+  }
+
+  res.status(RESPONSE_CODES.OK).json(response);
+});
+
+userRouter.post('/auth', async (req: Request, res: Response) => {
+
+  const { Email, Password } = req.body;
+
+  const userData: LoginUser = {
+    Email,
+    Password
+  }
+
+  const response = await controller.authenticate(userData);
+
+  if (response.error) {
+    res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json(response);
+  }
+
+  if (response.message) {
+    res.status(RESPONSE_CODES.BAD_REQUEST).json(response);
   }
 
   res.status(RESPONSE_CODES.OK).json(response);

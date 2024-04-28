@@ -1,8 +1,8 @@
 import { Get, Path, Post, Route, Response, SuccessResponse, Tags, Body, Put, Delete, } from 'tsoa'
-import type { NewUser, SafeUser, User } from '../models/User';
+import type { LoginUser, NewUser, SafeUser, User } from '../models/User';
 import { Prisma, PrismaClient } from '@prisma/client'
-import { hashPassword } from '../utils';
-import type { CheckUsernameAvailabilityResponse, UserCollectionResponse, UserCreationResponse, UserDeletedResponse, UserResponse, UserUpdatedResponse } from '../types';
+import { hashPassword, verifyPassword } from '../utils';
+import type { CheckUsernameAvailabilityResponse, UserAuthenticationResponse, UserCollectionResponse, UserCreationResponse, UserDeletedResponse, UserResponse, UserUpdatedResponse } from '../types';
 
 // TODO: Define response types in the types folder
 
@@ -63,6 +63,49 @@ export default class UserController {
     }
   }
 
+  @Get("/auth")
+  public async authenticate(userCreedentials: LoginUser): Promise<UserAuthenticationResponse> {
+    // First get user using his email
+    try {
+      const user = await this.prisma.user.findUnique(({
+        where: { Email: userCreedentials.Email }
+      }));
+
+      if (!user) throw user;
+
+      // Check if the password is same
+      const result = verifyPassword(userCreedentials.Password, user.Password);
+
+      if (!result) {
+        return {
+          user: null,
+          message: "Error al iniciar sesión, contraseña o email incorrectos."
+        }
+      }
+
+      return {
+        user: {
+          id: user.id,
+          Name: user.Name,
+          LastName: user.LastName,
+          UserName: user.UserName,
+          Email: user.Email,
+          Role: user.Role,
+        }
+      }
+    }
+    catch (err) {
+      return {
+        user: null,
+        error: {
+          message: `Internal Server Error: ${err}`
+        }
+      }
+    } 
+    finally {
+      await this.prisma.$disconnect();
+    }
+  }
   /**
    * Retrieves a specified user by their ID 
    * @param {number} id  - The ID of the user to retrieve.
