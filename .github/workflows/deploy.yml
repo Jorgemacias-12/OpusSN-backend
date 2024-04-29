@@ -1,0 +1,50 @@
+name: Deploy backend
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v4
+      
+      - name: Create .env file
+        run: |
+          touch .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "PRISMA_SCHEMAL=src/db/schema.prisma" >> .env
+      
+      - name: Install bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install repo dependencies
+        run: bun Install
+
+      - name: Run prisma migrations
+        run: bun prisma migrate deploy
+      
+      - name: Compile backend
+        run: bun run build
+      
+      - uses: GenieTim/ftp-action@v4.0.1
+        with:
+          host: ${{ secrets.FTP_SERVER }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD}}
+          localDir: "build"
+          remoteDir: ""
+      
+      - name: Connect to the server and start production
+        uses: appleboy/ssh-action@v1.0.3
+        with: 
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          
