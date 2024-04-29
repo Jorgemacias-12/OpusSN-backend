@@ -50,6 +50,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            ll
             cd /var/www/html/build
             pwd
+            ll
             pm2 start --interpreter bun /var/www/html/build/server.ts
