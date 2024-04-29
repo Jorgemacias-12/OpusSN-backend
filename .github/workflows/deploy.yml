@@ -41,7 +41,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
-          local-dir: 'build/'
+          local-dir: './build/'
       
       - name: Connect to the server and start production
         uses: appleboy/ssh-action@v1.0.3
@@ -50,8 +50,5 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            ls
             cd /var/www/html/build
-            pwd
-            ls
             pm2 start --interpreter bun /var/www/html/build/server.ts
