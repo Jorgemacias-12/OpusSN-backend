@@ -41,6 +41,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
+          server-dir: 'backend/'
           exclude: |
             **/.git/*
             **/.git*/**
@@ -64,5 +65,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            pwd
+            cd /var/www/html/backend/
             pm2 stop all
-            pm2 start --interpreter bun /var/www/html/build/server.js
+            pm2 start --interpreter build/server.js
