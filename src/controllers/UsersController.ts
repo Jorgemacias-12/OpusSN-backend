@@ -63,8 +63,8 @@ export default class UserController {
     }
   }
 
-  @Get("/auth")
-  public async authenticate(userCreedentials: LoginUser): Promise<UserAuthenticationResponse> {
+  @Post("/auth")
+  public async authenticate(@Body() userCreedentials: LoginUser): Promise<UserAuthenticationResponse> {
     // First get user using his email
     try {
       const user = await this.prisma.user.findUnique(({
