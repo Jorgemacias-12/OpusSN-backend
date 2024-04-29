@@ -79,7 +79,9 @@ export default class UserController {
       if (!result) {
         return {
           user: null,
-          message: "Error al iniciar sesión, contraseña o email incorrectos."
+          error: {
+            message: "Error al iniciar sesión, contraseña o email incorrectos"
+          }
         }
       }
 
