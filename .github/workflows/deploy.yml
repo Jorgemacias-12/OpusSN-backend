@@ -41,8 +41,22 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
-          local-dir: './build/'
           server-dir: 'build/'
+          exclude: |
+            **/.git/*
+            **/.git*/**
+            **/node_modules/**
+            src/**
+            .env.example
+            bun.lockb
+            LICENSE.txt
+            package.json
+            README.md
+            server.ts
+            setup
+            setup.ps1
+            tsconfig.json
+            tsoa.json
       
       - name: Connect to the server and start production
         uses: appleboy/ssh-action@v1.0.3
