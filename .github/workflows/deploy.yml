@@ -34,13 +34,12 @@ jobs:
       - name: Compile backend
         run: bun run build
       
-      - uses: GenieTim/ftp-action@v4.0.1
+      - name: Upload compiled code
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          host: ${{ secrets.FTP_SERVER }}
-          user: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD}}
-          localDir: "build"
-          remoteDir: ""
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
       
       - name: Connect to the server and start production
         uses: appleboy/ssh-action@v1.0.3
