@@ -33,6 +33,11 @@ jobs:
       
       - name: Compile backend
         run: bun run build
+
+      - name: Only upload build directory
+        run: |
+          mkdir build
+          mv * build/
       
       - name: Upload compiled code
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -50,5 +55,6 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd /var/www/html/build
-            pm2 start --interpreter bun /var/www/html/build/server.ts
+            cd /var/www/html
+            pm2 delete server || true  # Detener la aplicación anterior si existe
+            pm2 start --interpreter bun build/server.ts
