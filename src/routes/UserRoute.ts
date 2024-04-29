@@ -56,10 +56,6 @@ userRouter.post('/auth', async (req: Request, res: Response) => {
     res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json(response);
   }
 
-  if (response.message) {
-    res.status(RESPONSE_CODES.BAD_REQUEST).json(response);
-  }
-
   res.status(RESPONSE_CODES.OK).json(response);
 });
 
