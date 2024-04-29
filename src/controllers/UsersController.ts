@@ -91,7 +91,8 @@ export default class UserController {
           UserName: user.UserName,
           Email: user.Email,
           Role: user.Role,
-        }
+        },
+        message: "¡Inicio de sesión éxitoso!"
       }
     }
     catch (err) {
