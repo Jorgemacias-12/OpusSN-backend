@@ -40,6 +40,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
       
       - name: Connect to the server and start production
         uses: appleboy/ssh-action@v1.0.3
