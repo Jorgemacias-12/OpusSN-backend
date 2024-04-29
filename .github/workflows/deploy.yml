@@ -41,7 +41,6 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
-          server-dir: 'build/'
           exclude: |
             **/.git/*
             **/.git*/**
@@ -65,6 +64,5 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd /var/www/html
-            pm2 delete server || true  # Detener la aplicación anterior si existe
-            pm2 start --interpreter bun build/server.ts
+            pm2 stop all
+            pm2 start --interpreter bun /var/www/html/build/server.js
