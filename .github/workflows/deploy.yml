@@ -61,7 +61,7 @@ jobs:
             setup.ps1
             tsconfig.json
             tsoa.json
-          server-dir: '/var/www/html/backend/'
+          server-dir: 'backend/'
       
       - name: Connect to the server and start production
         uses: appleboy/ssh-action@v1.0.3
