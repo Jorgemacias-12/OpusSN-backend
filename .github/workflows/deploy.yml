@@ -47,7 +47,6 @@ jobs:
           exclude: |
             **/.git/*
             **/.git*/**
-            **/node_modules/**
             .env.example
             bun.lockb
             LICENSE.txt
