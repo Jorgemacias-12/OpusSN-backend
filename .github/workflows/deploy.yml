@@ -48,13 +48,19 @@ jobs:
             **/.git/*
             **/.git*/**
             **/node_modules/**
+            src/**
             .env.example
             bun.lockb
             LICENSE.txt
+            package.json
             README.md
+            server.ts
             setup
             setup.ps1
+            tsconfig.json
             tsoa.json
+          include:
+            src/db/schema.prisma
       
       - name: Connect to the server and start production
         uses: appleboy/ssh-action@v1.0.3
