@@ -30,6 +30,9 @@ jobs:
 
       - name: Run prisma migrations
         run: bun prisma migrate deploy
+
+      - name: Generate prisma client 🛜
+        run: bun prisma generate
       
       - name: Compile backend
         run: bun run build
@@ -41,12 +44,12 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
-          server-dir: 'backend/'
           exclude: |
             **/.git/*
             **/.git*/**
             **/node_modules/**
             src/**
+            !src/db/schema.prisma
             .env.example
             bun.lockb
             LICENSE.txt
