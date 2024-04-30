@@ -48,17 +48,12 @@ jobs:
             **/.git/*
             **/.git*/**
             **/node_modules/**
-            !src/db/schema.prisma
-            src/**
             .env.example
             bun.lockb
             LICENSE.txt
-            package.json
             README.md
-            server.ts
             setup
             setup.ps1
-            tsconfig.json
             tsoa.json
       
       - name: Connect to the server and start production
