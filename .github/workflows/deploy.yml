@@ -32,7 +32,7 @@ jobs:
         run: bun prisma migrate deploy
 
       - name: Generate prisma client 🛜
-        run: bun prisma client
+        run: bun prisma generate
       
       - name: Compile backend
         run: bun run build
