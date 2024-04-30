@@ -28,6 +28,9 @@ jobs:
       - name: Install repo dependencies
         run: bun install
 
+      - name: Update pm2
+        run: pm2 update
+      
       - name: Run prisma migrations
         run: bun prisma migrate deploy
 
@@ -58,7 +61,7 @@ jobs:
             setup.ps1
             tsconfig.json
             tsoa.json
-          server-dir: '/var/www/html/backend'
+          server-dir: '/var/www/html/backend/'
       
       - name: Connect to the server and start production
         uses: appleboy/ssh-action@v1.0.3
