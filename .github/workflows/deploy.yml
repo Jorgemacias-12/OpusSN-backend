@@ -48,8 +48,8 @@ jobs:
             **/.git/*
             **/.git*/**
             **/node_modules/**
-            src/**
             !src/db/schema.prisma
+            src/**
             .env.example
             bun.lockb
             LICENSE.txt
