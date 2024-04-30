@@ -30,6 +30,9 @@ jobs:
 
       - name: Run prisma migrations
         run: bun prisma migrate deploy
+
+      - name: Generate prisma client 🛜
+        run: bun prisma client
       
       - name: Compile backend
         run: bun run build
