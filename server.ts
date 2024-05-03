@@ -7,7 +7,7 @@ import { categoryRouter, postRouter, userRouter, commentRouter } from './src/rou
 import swaggerDocument from './build/public/swagger.json'
 import { fileURLToPath } from 'bun';
 import { dirname, join } from 'path'
-import http from 'http'
+import https from 'https'
 import { PORTS } from './src/types';
 import fs from 'fs';
 import { loadSSLFile } from './src/utils';
@@ -40,7 +40,16 @@ app.use(
   swaggerUi.setup(swaggerDocument)
 )
 
-const server = http.createServer();
+const options = {
+  key: process.env.SSL_KEY_PATH,
+  cert: process.env.SSL_CERTIFICATE_PATH
+}
+
+const server = https.createServer(options);
+
+server.listen(PORTS.SECURE_WEB_TRAFFIC, () => {
+  console.log(`SSL running on ${PORTS.SECURE_WEB_TRAFFIC}}`);
+})
 
 server.listen(PORT, () => {
   console.log(`HTTPS backend API server running on port ${PORT}`)

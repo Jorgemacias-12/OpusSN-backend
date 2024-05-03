@@ -237,5 +237,5 @@ export enum RESPONSE_CODES {
 }
 
 export enum PORTS {
-  SECURE_WEB_TRAFFIC = 443,
+  SECURE_WEB_TRAFFIC = 8443,
 }
