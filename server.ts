@@ -41,11 +41,11 @@ app.use(
 )
 
 const options = {
-  key: process.env.SSL_KEY_PATH,
-  cert: process.env.SSL_CERTIFICATE_PATH
+  key: await loadSSLFile(process.env.SSL_KEY_PATH as string),
+  cert: await loadSSLFile(process.env.SSL_CERTIFICATE_PATH as string)
 }
 
-const server = https.createServer(options);
+const server = https.createServer(options, app);
 
 server.listen(PORTS.SECURE_WEB_TRAFFIC, () => {
   console.log(`SSL running on ${PORTS.SECURE_WEB_TRAFFIC}}`);
