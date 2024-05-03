@@ -41,8 +41,8 @@ app.use(
 )
 
 const options = {
-  key: await loadSSLFile('./ssl.pem'),
-  cert: await loadSSLFile('./ssl.pem')
+  key: await loadSSLFile(process.env.SSL_KEY_PATH as string),
+  cert: await loadSSLFile(process.env.SSL_CERTIFICATE_PATH as string),
 }
 
 const server = https.createServer(options, app);
