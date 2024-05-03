@@ -235,3 +235,7 @@ export enum RESPONSE_CODES {
   /** Internal server error */
   INTERNAL_SERVER_ERROR = 500,
 }
+
+export enum PORTS {
+  SECURE_WEB_TRAFFIC = 443,
+}
