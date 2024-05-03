@@ -10,6 +10,7 @@ import { dirname, join } from 'path'
 import https from 'https'
 import { PORTS } from './src/types';
 import fs from 'fs';
+import { loadSSLFile } from './src/utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -40,8 +41,8 @@ app.use(
 )
 
 const options = {
-  key: fs.readFileSync(process.env.SSL_KEY_PATH as string),
-  cert: fs.readFileSync(process.env.SSL_CERTIFICATE_PATH as string)
+  key: await loadSSLFile('./ssl.pem'),
+  cert: await loadSSLFile('./ssl.pem')
 }
 
 const server = https.createServer(options, app);
