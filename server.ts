@@ -7,6 +7,9 @@ import { categoryRouter, postRouter, userRouter, commentRouter } from './src/rou
 import swaggerDocument from './build/public/swagger.json'
 import { fileURLToPath } from 'bun';
 import { dirname, join } from 'path'
+import https from 'https'
+import { PORTS } from './src/types';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -36,13 +39,17 @@ app.use(
   swaggerUi.setup(swaggerDocument)
 )
 
-app.get('/', (req, res) => {
-  res.json({
-    message: "API deployment sucessfull"
-  });
-});
+const options = {
+  key: fs.readFileSync(process.env.SSL_KEY_PATH as string),
+  cert: fs.readFileSync(process.env.SSL_CERTIFICATE_PATH as string)
+}
 
+const server = https.createServer(options, app);
 
-app.listen(PORT, () => {
-  console.log(`Express server start on ${PORT}`);
+server.listen(PORTS.SECURE_WEB_TRAFFIC, () => {
+  console.log(`HTTPS backend API server running on port ${PORTS.SECURE_WEB_TRAFFIC}`);
+})
+
+server.listen(PORT, () => {
+  console.log(`HTTPS backend API server running on port ${PORT}`)
 });
