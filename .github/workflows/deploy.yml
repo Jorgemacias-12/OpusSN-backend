@@ -16,13 +16,13 @@ jobs:
       
       - name: Create.env file
         run: |
-          touch.env
+          touch .env
           echo PORT=${{secrets.PORT}} >>.env
           echo DATABASE_URL="${{secrets.DATABASE_URL}}" >>.env
           echo PRISMA_SCHEMA=src/db/schema.prisma >>.env
           echo SSL_KEY_PATH=${{ secrets.SSL_KEY_PATH }} >>.env
           echo SSL_CERTIFICATE_PATH=${{ secrets.SSL_CERTIFICATE_PATH }} >>.env
-          cat.env
+          cat .env
       
       - name: Install bun
         uses: oven-sh/setup-bun@v1
