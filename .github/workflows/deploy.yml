@@ -14,15 +14,15 @@ jobs:
       - name: Clone repo
         uses: actions/checkout@v4
       
-      - name: Create .env file
+      - name: Create.env file
         run: |
-          touch .env
-          echo PORT=${{secrets.PORT}} >> .env
-          echo DATABASE_URL="${{secrets.DATABASE_URL}}" >> .env
-          echo PRISMA_SCHEMA=src/db/schema.prisma >> .env
-          echo SSL_KEY_PATH=${{ secrets.SSL_KEY_PATH }} >> .env
-          echo SSL_KEY_PATH=${{ secrets.SSL_CERTIFICATE_PATH }} >> .env
-          cat .env
+          touch.env
+          echo PORT=${{secrets.PORT}} >>.env
+          echo DATABASE_URL="${{secrets.DATABASE_URL}}" >>.env
+          echo PRISMA_SCHEMA=src/db/schema.prisma >>.env
+          echo SSL_KEY_PATH=${{ secrets.SSL_KEY_PATH }} >>.env
+          echo SSL_CERTIFICATE_PATH=${{ secrets.SSL_CERTIFICATE_PATH }} >>.env
+          cat.env
       
       - name: Install bun
         uses: oven-sh/setup-bun@v1
@@ -49,6 +49,7 @@ jobs:
           exclude: |
             **/.git/*
             **/.git*/**
+            **/node_modules/**
             .env.example
             bun.lockb
             LICENSE.txt
@@ -61,6 +62,16 @@ jobs:
             tsoa.json
           server-dir: 'backend/'
       
+      - name: Connect to the server and generate Prisma client
+        uses: appleboy/ssh-action@v1.0.3
+        with: 
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd /var/www/html/backend/
+            bunx prisma generate
+
       - name: Connect to the server and start production
         uses: appleboy/ssh-action@v1.0.3
         with: 
