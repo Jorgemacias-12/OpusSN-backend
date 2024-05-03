@@ -8,7 +8,7 @@ import swaggerDocument from './build/public/swagger.json'
 import { fileURLToPath } from 'bun';
 import { dirname, join } from 'path'
 import https from 'https'
-import { PORTS } from './src/types';
+import { PORTS, RESPONSE_CODES } from './src/types';
 import fs from 'fs';
 import { loadSSLFile } from './src/utils';
 
@@ -46,6 +46,12 @@ const options = {
 }
 
 const server = https.createServer(options, app);
+
+app.get('/', (_req, res) => {
+  res.status(RESPONSE_CODES.OK).json({
+    message: "Opus backend"
+  })
+})
 
 server.listen(PORTS.SECURE_WEB_TRAFFIC, () => {
   console.log(`SSL running on ${PORTS.SECURE_WEB_TRAFFIC}}`);
