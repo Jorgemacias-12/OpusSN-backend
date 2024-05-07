@@ -8,8 +8,8 @@ import swaggerDocument from './build/public/swagger.json'
 import { fileURLToPath } from 'bun';
 import { dirname, join } from 'path'
 import https from 'https'
+import http from 'http';
 import { PORTS, RESPONSE_CODES } from './src/types';
-import fs from 'fs';
 import { loadSSLFile } from './src/utils';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -40,23 +40,31 @@ app.use(
   swaggerUi.setup(swaggerDocument)
 )
 
+app.get('/', (_req, res) => {
+  res.status(RESPONSE_CODES.OK).json({
+    message: "Welcome to Opus REST API"
+  });
+})
+
 const options = {
   key: await loadSSLFile(process.env.SSL_KEY_PATH as string),
   cert: await loadSSLFile(process.env.SSL_CERTIFICATE_PATH as string)
 }
 
+const insecureServer = http.createServer(app);
 const server = https.createServer(options, app);
 
-app.get('/', (_req, res) => {
-  res.status(RESPONSE_CODES.OK).json({
-    message: "Opus backend"
+if (process.env.NODE_ENV === 'development') {
+  insecureServer.listen(PORT as number, '0.0.0.0', () => {
+    console.log(`Development server running on http://localhost:${PORT}`);
+  });
+}
+else {
+  server.listen(PORTS.SECURE_WEB_TRAFFIC, () => {
+    console.log(`SSL running on ${PORTS.SECURE_WEB_TRAFFIC}}`);
   })
-})
-
-server.listen(PORTS.SECURE_WEB_TRAFFIC, () => {
-  console.log(`SSL running on ${PORTS.SECURE_WEB_TRAFFIC}}`);
-})
-
-server.listen(PORT, () => {
-  console.log(`HTTPS backend API server running on port ${PORT}`)
-});
+  
+  server.listen(PORT, () => {
+    console.log(`HTTPS backend API server running on port ${PORT}`)
+  });
+}
