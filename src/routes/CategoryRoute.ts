@@ -25,8 +25,6 @@ categoryRouter.get('/', async (req: Request, res: Response) => {
     res.status(RESPONSE_CODES.OK).json(response);
   }
 
-  console.log(Category, CheckIfExists);
-
   const response = await controller.getCategories();
 
   if (response.error != null) {

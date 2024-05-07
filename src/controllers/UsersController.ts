@@ -113,6 +113,7 @@ export default class UserController {
    * Retrieves a specified user by their ID 
    * @param {number} id  - The ID of the user to retrieve.
    * @returns {Promise<UserReponse>} - A promise that resolves to a {@link UserResponse} object containing the user data if found, or an error message otherwise.
+   * TODO: do not include password field
    */
   @Get("/{id}")
   public async getUser(

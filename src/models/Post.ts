@@ -1,4 +1,5 @@
 import type { Category } from "./Category";
+import type { User } from "./User";
 
 export interface BasePost {
   id: number;
@@ -26,4 +27,15 @@ export interface UpdatePost {
   UpdateDate: Date;
   Categories: Category[];
   userId: number;
+}
+
+export interface FetchedPost {
+  id: number;
+  Title: string;
+  Content: string;
+  CreationDate: Date;
+  UpdateDate?: Date | null;
+  Categories: Category[];
+  userId: number;
+  User: User;
 }
