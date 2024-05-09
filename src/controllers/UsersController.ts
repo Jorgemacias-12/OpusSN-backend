@@ -71,7 +71,7 @@ export default class UserController {
         where: { Email: userCreedentials.Email }
       }));
 
-      if (!user) throw user;
+      if (!user) throw new Error("El usuario no existe");
 
       // Check if the password is same
       const result = await verifyPassword(userCreedentials.Password, user.Password);
@@ -101,7 +101,7 @@ export default class UserController {
       return {
         user: null,
         error: {
-          message: `Internal Server Error: ${err}`
+          message: `${err}`
         }
       }
     } 
