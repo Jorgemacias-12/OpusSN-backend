@@ -10,9 +10,6 @@ export class CommentsControler {
   prisma = new PrismaClient();
 
   public async createComment(@Body() comment: NewComment): Promise<CommentCreationResponse> {
-
-    console.table(comment);
-
     try {
       const newPost = await this.prisma.comment.create({
         data: {
