@@ -54,7 +54,7 @@ const createCategoryValidationChain: ValidationChain[] = [
   body('Name')
     .notEmpty()
     .withMessage(createCategoryErrorMessages.categoryNameRequired)
-    .isLength({ min: 3, max: 30 })
+    .isLength({ min: 2, max: 30 })
     .withMessage(createCategoryErrorMessages.categoryLength)
 ]
 
