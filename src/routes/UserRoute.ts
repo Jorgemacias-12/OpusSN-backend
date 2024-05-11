@@ -106,7 +106,7 @@ const createUserValidationChain: ValidationChain[] = [
     .withMessage(createUserErrorMessages.usernameRequired)
     .isLength({ min: 3, max: 15 })
     .withMessage(createUserErrorMessages.usernameLength)
-    .matches(/^[a-zA-Z0-9_-]+$/)
+    .matches(/^[a-zA-Z0-9_-ñ]+$/)
     .withMessage(createUserErrorMessages.usernameCharacters)
     .custom(async (value) => {
       let userExists: boolean = false;
