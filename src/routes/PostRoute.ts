@@ -44,6 +44,26 @@ postRouter.get('/:id', async (req: Request, res: Response) => {
   res.status(RESPONSE_CODES.OK).json(response);
 });
 
+postRouter.get('/:id/comments', async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const parsedId = parseInt(id);
+
+  if (isNaN(parsedId) || !Number.isInteger(parsedId) || parsedId <= 0) {
+    res.status(RESPONSE_CODES.BAD_REQUEST).json({
+      error: `Invalid post id ${id}`
+    })
+  }
+
+  const response = await controller.getPostComments(parsedId);
+
+  if (response.error) {
+    res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json(response);
+  }
+
+  res.status(RESPONSE_CODES.OK).json(response);
+});
+
 const postValidationChain: ValidationChain[] = [
   body('Title')
     .notEmpty()

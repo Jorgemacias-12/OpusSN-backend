@@ -71,7 +71,7 @@ export default class UserController {
         where: { Email: userCreedentials.Email }
       }));
 
-      if (!user) throw user;
+      if (!user) throw new Error("El usuario no existe");
 
       // Check if the password is same
       const result = await verifyPassword(userCreedentials.Password, user.Password);
@@ -101,7 +101,7 @@ export default class UserController {
       return {
         user: null,
         error: {
-          message: `Internal Server Error: ${err}`
+          message: `${err}`
         }
       }
     } 
@@ -113,6 +113,7 @@ export default class UserController {
    * Retrieves a specified user by their ID 
    * @param {number} id  - The ID of the user to retrieve.
    * @returns {Promise<UserReponse>} - A promise that resolves to a {@link UserResponse} object containing the user data if found, or an error message otherwise.
+   * TODO: do not include password field
    */
   @Get("/{id}")
   public async getUser(

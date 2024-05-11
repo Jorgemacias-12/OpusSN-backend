@@ -215,6 +215,14 @@ export interface UserAuthenticationResponse {
   message?: string;
 } 
 
+export interface CommentsFetchResponse {
+  comments: ResponseComment[] | null;
+  error?: { 
+    message: string;
+  }
+  message?: string;
+}
+
 /**
  * Enumeration of possible response codes.
  * @enum {number}
@@ -237,5 +245,5 @@ export enum RESPONSE_CODES {
 }
 
 export enum PORTS {
-  SECURE_WEB_TRAFFIC = 443,
+  SECURE_WEB_TRAFFIC = 8443,
 }

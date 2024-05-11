@@ -8,11 +8,27 @@ export const commentRouter = Router();
 
 export const controller = new CommentsControler();
 
-commentRouter.get('/', () => {
+commentRouter.get('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
 
+  const parsedPostId = parseInt(id);
+
+  if (isNaN(parsedPostId) || !Number.isInteger(parsedPostId) || parsedPostId <= 0) {
+    res.status(RESPONSE_CODES.BAD_REQUEST).json({
+      error: `Invalid post id ${id}`
+    })
+  }
+
+  const response = await controller.getCommentsFromPost(parsedPostId);
+
+  if (response.error) {
+    res.status(RESPONSE_CODES.INTERNAL_SERVER_ERROR).json(response);
+  }
+
+  res.status(RESPONSE_CODES.OK).json(response);
 });
 
-commentRouter.get('/:id', () => {
+commentRouter.get('', async () => {
 
 });
 

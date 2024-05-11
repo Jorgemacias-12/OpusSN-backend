@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Body, Delete, Get, Post, Put, Query, Route, Tags } from "tsoa";
-import type { PostCreationReponse, PostDeleteResponse, PostResponse, PostUpdateResponse, PostsReponse } from "../types";
+import type { CommentsFetchResponse, PostCreationReponse, PostDeleteResponse, PostResponse, PostUpdateResponse, PostsReponse } from "../types";
 import type { BasePost, NewPost, UpdatePost } from "../models/Post";
 import { toIsoDate } from "../utils";
 
@@ -13,7 +13,7 @@ export class PostsController {
   public async getPosts(): Promise<PostsReponse> {
     try {
       const posts = await this.prisma.post.findMany({
-        include: { Categories: true }
+        include: { Categories: true, User: true }
       });
       const postCount = await this.prisma.post.count();
 
@@ -55,6 +55,41 @@ export class PostsController {
         post: null,
         error: {
           message: `Error: ${error}`
+        }
+      }
+    }
+    finally {
+      await this.prisma.$disconnect();
+    }
+  }
+
+  @Get("/:id/comments")
+  public async getPostComments(id: number): Promise<CommentsFetchResponse> {
+    try {
+      const post = await this.prisma.post.findUnique({
+        where: {
+          id: id
+        },
+        include: {
+          Comment: true
+        }
+      })
+
+      if (!post) throw new Error("Post not found");
+      if (!post.Comment) throw new Error("This post doesn't have comments");
+
+      const comments = post.Comment;
+
+      return {
+        message: "Comments fetched correctly",
+        comments
+      }
+    }
+    catch (err) {
+      return {
+        comments: null,
+        error: {
+          message: `Error: ${err}`
         }
       }
     }

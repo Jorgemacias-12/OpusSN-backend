@@ -50,6 +50,7 @@ jobs:
             **/.git/*
             **/.git*/**
             **/node_modules/**
+            **/src/**
             .env.example
             bun.lockb
             LICENSE.txt
