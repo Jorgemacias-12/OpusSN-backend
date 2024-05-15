@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { Body, Delete, Get, Path, Post, Route, SuccessResponse, Tags } from 'tsoa';
-import type { CategoryCollectionReponse, CategoryCreationResponse, CategoryDeletionResponse, CategoryResponse, CheckCategoryAvailabilityResponse } from '../types';
+import type { CategoryCollectionResponse, CategoryCreationResponse, CategoryDeletionResponse, CategoryResponse, CheckCategoryAvailabilityResponse } from '../types';
 import type { NewCategory } from '../models/Category';
 
 @Route("/categories")
@@ -10,7 +10,7 @@ export class CategoriesController {
 
   @Get("/")
   @SuccessResponse("200", "Sucess")
-  public async getCategories(): Promise<CategoryCollectionReponse> {
+  public async getCategories(): Promise<CategoryCollectionResponse> {
     try {
       const categories = await this.prisma.category.findMany();
       const categoryCount = await this.prisma.category.count();
