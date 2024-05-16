@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Body, Delete, Get, Post, Put, Query, Route, Tags } from "tsoa";
-import type { CommentsFetchResponse, PostCreationReponse, PostDeleteResponse, PostResponse, PostUpdateResponse, PostsReponse } from "../types";
+import type { CommentsFetchResponse, PostCreationResponse, PostDeleteResponse, PostResponse, PostUpdateResponse, PostsResponse } from "../types";
 import type { BasePost, NewPost, UpdatePost } from "../models/Post";
 import { toIsoDate } from "../utils";
 
@@ -10,7 +10,7 @@ export class PostsController {
   prisma = new PrismaClient();
 
   @Get("/")
-  public async getPosts(): Promise<PostsReponse> {
+  public async getPosts(): Promise<PostsResponse> {
     try {
       const posts = await this.prisma.post.findMany({
         include: { Categories: true, User: true }
@@ -99,7 +99,7 @@ export class PostsController {
   }
 
   @Post("/")
-  public async createPost(@Body() post: NewPost): Promise<PostCreationReponse> {
+  public async createPost(@Body() post: NewPost): Promise<PostCreationResponse> {
     try {
       const user = await this.prisma.user.findUnique({
         where: {
