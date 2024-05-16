@@ -132,94 +132,348 @@ export interface PrismaError {
   message: string;
 }
 
-
+/**
+ * Represents the response from creating a new category.
+ *
+ * @interface CategoryCreationResponse
+ */
 export interface CategoryCreationResponse {
+  /**
+   * A message indicating the outcome of the category creation operation.
+   *
+   * @type {string | null | undefined}
+   */
   message?: string | null;
-  category: Category | null
-  error?: PrismaError
+
+  /**
+   * The created category data, or `null` if the category creation was unsuccessful.
+   *
+   * @type {Category | null}
+   */
+  category: Category | null;
+
+  /**
+   * Optional error object containing information about any error that occurred during the request.
+   *
+   * @type {PrismaError | undefined}
+   */
+  error?: PrismaError;
 }
 
-export interface CategoryCollectionReponse {
+/**
+ * Represents the response from fetching a collection of categories.
+ *
+ * @interface CategoryCollectionResponse
+ */
+export interface CategoryCollectionResponse {
+  /**
+   * An array of categories retrieved from the collection.
+   *
+   * @type {Category[] | null}
+   */
   categories: Category[] | null;
+
+  /**
+   * The count of categories included in the response.
+   *
+   * @type {number}
+   */
   categoryCount: number;
+
+  /**
+   * Optional error object containing information about any error that occurred during the request.
+   *
+   * @type {PrismaError | undefined}
+   */
   error?: PrismaError;
 }
 
+/**
+ * Represents the response from checking category availability.
+ *
+ * @interface CheckCategoryAvailabilityResponse
+ */
 export interface CheckCategoryAvailabilityResponse {
+  /**
+   * Indicates whether the category is available or not.
+   *
+   * @type {boolean | null}
+   */
   isAvailable: boolean | null;
+
+  /**
+   * Optional error object containing information about any error that occurred during the request.
+   *
+   * @type {PrismaError | undefined}
+   */
   error?: PrismaError;
 }
 
+/**
+ * Represents the response from deleting a category.
+ *
+ * @interface CategoryDeletionResponse
+ */
 export interface CategoryDeletionResponse {
+  /**
+   * A message indicating the outcome of the category deletion operation.
+   *
+   * @type {string | null | undefined}
+   */
   message?: string | null;
+
+  /**
+   * The deleted category data, or `null` if the category deletion was unsuccessful.
+   *
+   * @type {Category | null}
+   */
   category: Category | null;
-  error?: PrismaError
+
+  /**
+   * Optional error object containing information about any error that occurred during the request.
+   *
+   * @type {PrismaError | undefined}
+   */
+  error?: PrismaError;
 }
 
+/**
+ * Represents the response containing a category.
+ *
+ * @interface CategoryResponse
+ */
 export interface CategoryResponse {
+  /**
+   * The category data, or `null` if no category was found.
+   *
+   * @type {Category | null}
+   */
   category: Category | null;
+
+  /**
+   * Optional error object containing information about any error that occurred during the request.
+   *
+   * @type {{ message: string } | undefined}
+   */
   error?: {
     message: string;
-  }
+  };
 }
 
-
+/**
+ * Represents the response containing a single post.
+ *
+ * @interface PostResponse
+ */
 export interface PostResponse {
-  post: BasePost | null,
+  /**
+   * The post data, or `null` if no post was found.
+   *
+   * @type {BasePost | null}
+   */
+  post: BasePost | null;
+
+  /**
+   * Optional error object containing information about any error that occurred during the request.
+   *
+   * @type {{ message: string } | undefined}
+   */
   error?: {
     message: string;
-  }
+  };
 }
 
-export interface PostsReponse {
+/**
+ * Represents the response containing a collection of posts.
+ *
+ * @interface PostsResponse
+ */
+export interface PostsResponse {
+  /**
+   * An array of posts retrieved from the collection.
+   *
+   * @type {BasePost[] | null}
+   */
   posts: BasePost[] | null;
+
+  /**
+   * The count of posts included in the response.
+   *
+   * @type {number | undefined}
+   */
   postCount?: number;
+
+  /**
+   * Optional error object containing information about any error that occurred during the request.
+   *
+   * @type {{ message: string } | undefined}
+   */
   error?: {
     message: string;
-  }
+  };
 }
 
-export interface PostCreationReponse {
-  createdPost: BasePost | null,
+/**
+ * Represents the response from creating a new post.
+ *
+ * @interface PostCreationResponse
+ */
+export interface PostCreationResponse {
+  /**
+   * The created post data, or `null` if the post creation was unsuccessful.
+   *
+   * @type {BasePost | null}
+   */
+  createdPost: BasePost | null;
+
+  /**
+   * Optional error object containing information about any error that occurred during the request.
+   *
+   * @type {{ message: string } | undefined}
+   */
   error?: {
     message: string;
-  }
+  };
 }
 
+/**
+ * Represents the response from updating a post.
+ *
+ * @interface PostUpdateResponse
+ */
 export interface PostUpdateResponse {
-  updatedPost: BasePost | null,
+  /**
+   * The updated post data, or `null` if the post update was unsuccessful.
+   *
+   * @type {BasePost | null}
+   */
+  updatedPost: BasePost | null;
+
+  /**
+   * A message indicating the outcome of the post update operation.
+   *
+   * @type {string}
+   */
   message: string;
 }
 
+/**
+ * Represents the response from deleting a post.
+ *
+ * @interface PostDeleteResponse
+ */
 export interface PostDeleteResponse {
+  /**
+   * The deleted post data, or `null` if the post deletion was unsuccessful.
+   *
+   * @type {BasePost | null | undefined}
+   */
   deletedPost?: BasePost | null;
+
+  /**
+   * A message indicating the outcome of the post deletion operation.
+   *
+   * @type {string | undefined}
+   */
   message?: string;
+
+  /**
+   * Optional error object containing information about any error that occurred during the request.
+   *
+   * @type {{ message: string } | undefined}
+   */
   error?: {
     message: string;
-  }
+  };
 }
 
+/**
+ * Represents the response from creating a new comment.
+ *
+ * @interface CommentCreationResponse
+ */
 export interface CommentCreationResponse {
-  comment: ResponseComment; 
+  /**
+   * The created comment data.
+   *
+   * @type {ResponseComment}
+   */
+  comment: ResponseComment;
+
+  /**
+   * Optional error object containing information about any error that occurred during the request.
+   *
+   * @type {{ message: string } | undefined}
+   */
   error?: {
     message: string;
-  }
-  message?: string 
+  };
+
+  /**
+   * A message indicating the outcome of the comment creation operation.
+   *
+   * @type {string | undefined}
+   */
+  message?: string;
 }
 
+/**
+ * Represents the response from user authentication.
+ *
+ * @interface UserAuthenticationResponse
+ */
 export interface UserAuthenticationResponse {
+  /**
+   * The authenticated user data, or `null` if authentication failed.
+   *
+   * @type {SafeUser | null}
+   */
   user: SafeUser | null;
+
+  /**
+   * Optional error object containing information about any error that occurred during the request.
+   *
+   * @type {{ message: string } | undefined}
+   */
   error?: {
     message: string;
-  }
-  message?: string;
-} 
+  };
 
+  /**
+   * A message indicating the outcome of the user authentication operation.
+   *
+   * @type {string | undefined}
+   */
+  message?: string;
+}
+
+/**
+ * Represents the response from fetching comments.
+ *
+ * @interface CommentsFetchResponse
+ */
 export interface CommentsFetchResponse {
+  /**
+   * An array of comments retrieved from the fetch operation.
+   *
+   * @type {ResponseComment[] | null}
+   */
   comments: ResponseComment[] | null;
-  error?: { 
+
+  /**
+   * Optional error object containing information about any error that occurred during the request.
+   *
+   * @type {{ message: string } | undefined}
+   */
+  error?: {
     message: string;
-  }
+  };
+
+  /**
+   * A message indicating the outcome of the comments fetch operation.
+   *
+   * @type {string | undefined}
+   */
   message?: string;
 }
 

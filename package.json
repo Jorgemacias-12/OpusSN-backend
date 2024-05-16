@@ -32,9 +32,7 @@
     "build": "bun build --target=bun ./server.ts --outdir ./build",
     "predev": "bun swagger || true",
     "prebuild": "bun swagger || true",
-    "swagger": "bun tsoa spec",
-    "setup:windows": ".\\main.ps1",
-    "setup:linux": "./setup"
+    "swagger": "bun tsoa spec"
   },
   "prisma": {
     "schema": "./src/db/schema.prisma"
