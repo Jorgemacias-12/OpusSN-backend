@@ -15,7 +15,7 @@ export const createUserErrorMessages = {
 
 export const createCategoryErrorMessages = {
   categoryNameRequired: 'El nombre de la categoría no debe estar vacio.',
-  categoryLength: 'El tamaño de la categoría debe ser entre 5 y 20 caracteres'
+  categoryLength: 'El tamaño de la categoría debe ser entre 2 y 20 caracteres'
 }
 
 export const createPostErrorMessages = {
