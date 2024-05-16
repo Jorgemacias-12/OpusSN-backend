@@ -20,9 +20,11 @@ const app: Express = express();
 
 // Middlewares
 app.use(morgan('dev'));
-app.use(cors({
-  origin: '*'
-}));
+app.use((req, res, next) => {
+  res.append('Access-Control-Allow-Origin', ['*'])
+  next();
+});
+app.use(cors({}));
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -63,9 +65,9 @@ if (process.env.NODE_ENV === 'development') {
 }
 else {
   server.listen(PORTS.SECURE_WEB_TRAFFIC, () => {
-    console.log(`SSL running on ${PORTS.SECURE_WEB_TRAFFIC}}`);
+    console.log(`SSL running on ${PORTS.SECURE_WEB_TRAFFIC}`);
   })
-  
+
   server.listen(PORT, () => {
     console.log(`HTTPS backend API server running on port ${PORT}`)
   });
